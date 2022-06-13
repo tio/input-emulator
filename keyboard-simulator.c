@@ -118,6 +118,9 @@ static int16_t ascii_to_key_map[][2] =
     { '\'', KEY_BACKSLASH },
     { '*', KEY_BACKSLASH | SHIFT },
 
+    { '<', KEY_102ND },
+    { '>', KEY_102ND | SHIFT },
+
     { '_', KEY_SLASH | SHIFT},
     { ':', KEY_DOT | SHIFT },
     { ';', KEY_COMMA | SHIFT },
