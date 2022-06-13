@@ -1,4 +1,4 @@
-# keyboard-simulator - A simple keyboard simulator for Linux
+# keyboard-simulator - A simple keyboard simulator
 
 ## 1. Introduction
 
