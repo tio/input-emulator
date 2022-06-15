@@ -29,7 +29,8 @@
 #include <linux/uinput.h>
 #include "script.h"
 
-#define SHIFT (1 << 14)
+#define SHIFT  (1 << 14)
+#define ALT_GR (1 << 13)
 
 /* Map list of supportd ASCII values (incomplete) */
 static int16_t ascii_to_key_map[][2] =
@@ -114,7 +115,9 @@ static int16_t ascii_to_key_map[][2] =
     { '-', KEY_SLASH },
     { '.', KEY_DOT },
     { ',', KEY_COMMA },
-    
+
+    { '~', KEY_RIGHTBRACE | ALT_GR },
+
     { '\'', KEY_BACKSLASH },
     { '*', KEY_BACKSLASH | SHIFT },
 
@@ -263,6 +266,7 @@ int16_t ascii_to_key(uint8_t c)
 void type_key(int fd, int16_t key)
 {
     bool shift = false;
+    bool alt_gr = false;
 
     if (key < 0)
     {
@@ -277,16 +281,29 @@ void type_key(int fd, int16_t key)
 
         // Remove shift bit
         key &= ~(SHIFT);
+
+        key_press(fd, KEY_LEFTSHIFT);
     }
 
-    if (shift)
+    // Apply alt-gr if required
+    if (ALT_GR & key)
     {
-        key_press(fd, KEY_LEFTSHIFT);
+        alt_gr = true;
+
+        // Remove alt-gr bit
+        key &= ~(ALT_GR);
+
+        key_press(fd, KEY_RIGHTALT);
     }
 
     key_press(fd, key);
     usleep(12*1000);
     key_release(fd, key);
+
+    if (alt_gr)
+    {
+        key_release(fd, KEY_RIGHTALT);
+    }
 
     if (shift)
     {
