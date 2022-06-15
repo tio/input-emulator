@@ -25,14 +25,15 @@
 
 void keyboard_script(int fd)
 {
+    sleep(6);
     type_string(fd, "\r", DELAY);
-    type_string(fd, "# Tio comes with full bash completion support\r", DELAY);
+    type_string(fd, "# tio comes with full shell completion support\r", DELAY);
     type_string(fd, "\r", DELAY);
     sleep(2);
     type_string(fd, "tio --\t\t", DELAY);
-    sleep(1);
-    type_string(fd, "help\r", DELAY);
     sleep(3);
+    type_string(fd, "help\r", DELAY);
+    sleep(10);
     type_string(fd, "\r", DELAY);
     type_string(fd, "# Let's list available serial devices\r", DELAY);
     type_string(fd, "\r", DELAY);
@@ -46,7 +47,7 @@ void keyboard_script(int fd)
     type_string(fd, "tio /dev/serial/by-id/usb-Silicon_Labs_CP2105_Dual_USB_to_UART_Bridge_Controller_01093176-if01-port0\r", 25);
     sleep(3);
     type_string(fd, "\r\r", DELAY);
-    type_string(fd, "# We are now connected to a remote TTY terminal via a usb<->serial cable\r", DELAY);
+    type_string(fd, "# We are now connected to remote TTY terminal via a usb<->serial cable\r", DELAY + 5);
     type_string(fd, "\r", DELAY);
     sleep(3);
     type_string(fd, "uname -sniro\r", DELAY);
@@ -110,9 +111,28 @@ void keyboard_script(int fd)
     key_release(fd, KEY_LEFTCTRL);
     type_string(fd, "q", DELAY);
     sleep(3);
-    key_press(fd, KEY_LEFTCTRL);
-    type_key(fd, KEY_T);
-    key_release(fd, KEY_LEFTCTRL);
-    type_key(fd, KEY_Q);
+    type_string(fd, "\r", DELAY);
+    type_string(fd, "# tio can also be configured via configuration file\r", DELAY);
+    type_string(fd, "\r", DELAY);
+    sleep(3);
+    type_string(fd, "cat ~/.tiorc\r", DELAY);
     sleep(10);
+    type_string(fd, "\r", DELAY);
+    type_string(fd, "# Connect using specific sub-configuration by name\r", DELAY);
+    type_string(fd, "\r", DELAY);
+    sleep(3);
+    type_string(fd, "tio am64-evm\r", DELAY);
+    sleep(3);
+    key_press(fd, KEY_LEFTCTRL);
+    type_string(fd, "t", DELAY);
+    key_release(fd, KEY_LEFTCTRL);
+    type_string(fd, "q", DELAY);
+    sleep(3);
+    type_string(fd, "tio tincan\r", DELAY);
+    sleep(3);
+    key_press(fd, KEY_LEFTCTRL);
+    type_string(fd, "t", DELAY);
+    key_release(fd, KEY_LEFTCTRL);
+    type_string(fd, "q", DELAY);
+    sleep(6);
 }
