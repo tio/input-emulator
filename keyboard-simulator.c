@@ -27,10 +27,15 @@
 #include <fcntl.h>
 #include <string.h>
 #include <linux/uinput.h>
-#include "script.h"
+#include <lua.h>
+#include <lauxlib.h>
+#include <lualib.h>
 
 #define SHIFT  (1 << 14)
 #define ALT_GR (1 << 13)
+
+static int fd;
+static int type_delay = 0;
 
 /* Map list of supportd ASCII values (incomplete) */
 static int16_t ascii_to_key_map[][2] =
@@ -311,7 +316,7 @@ void type_key(int fd, int16_t key)
     }
 }
 
-void type_string(int fd, char *string, int delay)
+void type_string(int fd, const char *string, int delay)
 {
     int i = 0;
 
@@ -363,13 +368,140 @@ void uinput_destroy(int fd)
     close(fd);
 }
 
-int main(void)
+// lua: key_press(key)
+static int lua_key_press(lua_State *L)
 {
-    /* Create virtual input device */
-    int fd = uinput_create();
+    int key = lua_tointeger(L, 1);
 
-    /* Run keyboard script */
-    keyboard_script(fd);
+    key_press(fd, key);
+
+    return 0;
+}
+
+// lua: key_release(key)
+static int lua_key_release(lua_State *L)
+{
+    int key = lua_tointeger(L, 1);
+
+    key_release(fd, key);
+
+    return 0;
+}
+
+// lua: set_type_delay(delay)
+static int lua_set_type_delay(lua_State *L)
+{
+    int delay = lua_tointeger(L, 1);
+
+    type_delay = delay;
+
+    return 0;
+}
+
+// lua: type(string, delay)
+static int lua_type_(lua_State *L)
+{
+    int delay;
+    const char *string = lua_tostring(L, 1);
+
+    if (lua_gettop(L) == 2)
+    {
+        delay = lua_tointeger(L, 2);
+    }
+    else
+    {
+        delay = type_delay;
+    }
+
+    type_string(fd, string, delay);
+
+    return 0;
+}
+
+// lua: sleep(seconds)
+static int lua_sleep(lua_State *L)
+{
+    long seconds = lua_tointeger(L, 1);
+
+    sleep(seconds);
+
+    return 0;
+}
+
+// lua: msleep(miliseconds)
+static int lua_msleep(lua_State *L)
+{
+    long mseconds = lua_tointeger(L, 1);
+    long useconds = mseconds * 1000;
+
+    usleep(useconds);
+
+    return 0;
+}
+
+int lua_add_globals(lua_State *L)
+{
+    lua_pushnumber(L, KEY_LEFTCTRL);
+    lua_setglobal(L, "KEY_LEFTCTRL");
+}
+
+int lua_register_script_functions(lua_State *L)
+{
+    lua_register(L, "key_press", lua_key_press);
+    lua_register(L, "key_release", lua_key_release);
+    lua_register(L, "set_type_delay", lua_set_type_delay);
+    lua_register(L, "type", lua_type_);
+    lua_register(L, "sleep", lua_sleep);
+    lua_register(L, "msleep", lua_msleep);
+    return 0;
+}
+
+int run(char *filename)
+{
+    lua_State *L;
+
+    if (strlen(filename) == 0)
+    {
+        fprintf(stderr, "Missing sript filename\n");
+        return -1;
+    }
+
+    /* Initialize lua */
+    L = luaL_newstate();
+    luaL_openlibs(L);
+
+    /* Prepare lua environment */
+    lua_register_script_functions(L);
+    lua_add_globals(L);
+
+    /* Run script file */
+    if (luaL_dofile(L, filename))
+    {
+        fprintf(stderr, "%s\n", lua_tostring(L, -1));
+        lua_close(L);
+        return -1;
+    }
+
+    lua_close(L);
+
+    return 0;
+}
+
+
+int main(int argc, char *argv[])
+{
+    /* Check argmuments */
+    if (argc != 2)
+    {
+        printf("Usage: %s <filename>\n", argv[0]);
+        return 0;
+    }
+
+    /* Create virtual input device */
+    fd = uinput_create();
+
+    /* Run script */
+    run(argv[1]);
 
     /* Wait for userspace to finish reading events */
     sleep(1);

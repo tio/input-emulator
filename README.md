@@ -13,6 +13,8 @@ It is made specifically for creating the animated GIF showing tio in action.
 
 ## 2. How to build
 
+To build successfully you need liblua5.4-dev installed.
+
 ```
  $ make
 ```
@@ -20,9 +22,9 @@ It is made specifically for creating the animated GIF showing tio in action.
 ## 3. How to run
 
 ```
- $ ./keyboard-simulator &
+ $ ./keyboard-simulator test.keyboard &
 ```
 
 ## 4. Contribute
 
-Feel fee to improve the implementation with e.g. proper scripting support.
+Feel free to improve the implementation.
