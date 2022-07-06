@@ -302,7 +302,7 @@ void type_key(int fd, int16_t key)
     }
 
     key_press(fd, key);
-    usleep(12*1000);
+    usleep(14*1000);
     key_release(fd, key);
 
     if (alt_gr)
