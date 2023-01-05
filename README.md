@@ -16,13 +16,15 @@ It is made specifically for creating the animated GIF showing tio in action.
 To build successfully you need liblua5.4-dev installed.
 
 ```
- $ make
+ $ meson build
+ $ meson compile -C build
+ $ meson install -C build
 ```
 
 ## 3. How to run
 
 ```
- $ ./keyboard-simulator test.keyboard &
+ $ keyboard-simulator examples/test.keyboard &
 ```
 
 ## 4. Contribute
