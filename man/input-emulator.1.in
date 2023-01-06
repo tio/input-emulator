@@ -1,0 +1,215 @@
+.TH "input-emulator" "1" "@version_date@" "input-emulator @version@" "User Commands"
+
+.SH "NAME"
+input-emulator \- a simple input device emulator
+
+.SH "SYNOPSIS"
+.PP
+.B input-emulator
+.RI [--version]
+.RI [--help]
+.RI <command>
+.RI [<arguments>]
+
+.SH "DESCRIPTION"
+.PP
+\fBinput-emulator\fR is a simple input device emulator tool which features a
+straightforward command-line interface to easily create input devices (keyboard,
+mouse, touch) and perform various high level actions (typing, moving,
+gesturiung, etc.) via injected input events.
+
+.SH "OPTIONS"
+
+.TP
+.B \-h, \--help
+Show help
+
+.TP
+.B \-v, \--version
+Show program version
+
+.SH "COMMANDS"
+
+.TP
+.BR start
+.I <device>
+.I [<arguments>]
+
+Create virtual input device
+
+.TP
+.BR kbd
+.I <action>
+.I [<arguments>]
+
+Perform keyboard action.
+.TP
+.BR mouse
+.I <action>
+.I [<arguments>]
+
+Perform mouse action.
+.TP
+.BR touch
+.I <action>
+.I [<arguments>]
+
+Perform touch action.
+.TP
+.BR status
+
+Show status of emulated input devices.
+
+.TP
+.BR run
+.I <file>
+
+Run script file.
+
+.TP
+.BR stop
+.I <device>
+
+Destroy virtual input device
+
+.SH "START DEVICE OPTIONS"
+
+.TP
+.BR kbd
+
+Create keyboard input device.
+
+.TP
+.BR mouse
+.B [--x-max <x>] [--y-max <y>]
+
+Create mouse input device with x and y maximum resolution (default: 1920 1080).
+
+.TP
+.BR touch
+.B [--x-max <x>] [--y-max <y>] [<slots>]
+
+Create multi touch input device with x,y resolution and maximum number of slots
+(recognized fingers) (default: 1920 1080 4).
+
+.SH "KEYBOARD ACTIONS"
+
+.TP 9n
+.BR key
+.B <key>
+
+Type a given key (press and release).
+
+.TP
+.BR type
+.B <string>
+
+Type a given string of characters.
+
+.TP
+.BR keydown
+.B <key>
+
+Press and hold a given key.
+
+.TP
+.BR keyup
+.B <key>
+
+Release a given key.
+
+.SH "MOUSE ACTIONS"
+
+.TP
+.BR move
+.B <x>
+.B <y>
+
+Move mouse to x,y coordinate.
+
+.TP
+.BR click
+.B <button>
+
+Click mouse button (left, right, middle).
+
+.TP
+.BR down
+.B <button>
+
+Press and keep mouse button (left, right, middle) down.
+
+.TP
+.BR up
+.B <button>
+
+Release mouse button (left, right, middle).
+
+.SH "TOUCH ACTIONS"
+
+.TP
+.BR tap
+.B <x> <y>
+
+Tap screen at x,y coordinate.
+
+.SH "STOP DEVICE OPTIONS"
+
+.TP
+.BR kbd
+
+Destroy keyboard input device.
+
+.TP
+.BR mouse
+
+Destroy mouse input device.
+
+.TP
+.BR touch
+
+Destroy touch input device.
+
+.SH "EXAMPLES"
+
+.TP
+Touch example:
+ $ input-emulator touch start --x-max 2560 --y-max 1440 --slots 4
+ $ input-emulator touch tap 1280 720
+ $ input-emulator touch stop
+
+.TP
+Mouse example:
+ $ input-emulator mouse start --x-max 2560 --y-max 1440
+ $ input-emulator mouse move 1280 720
+ $ input-emulator mouse click left
+ $ input-emulator mouse down middle
+ $ input-emulator mouse up middle
+ $ input-emulator mouse stop
+
+
+.TP
+Keyboard example:
+ $ input-emulator kbd start
+ $ input-emulator kbd type 'hello there'
+ $ input-emulator kbd keydown ctrl
+ $ input-emulator kbd key t
+ $ input-emulator kbd keyup ctrl
+ $ input-emulator kbd key q
+ $ input-emulator kbd stop
+
+.TP
+Show status of input devices:
+ $ input-emulator status
+
+.TP
+Run script:
+ $ input-emulator run examples/keyboard-test.lua
+
+.SH "WEBSITE"
+.PP
+Visit https://github.com/tio/input-emulator
+
+.SH "AUTHOR"
+.PP
+Created by Martin Lund <martin.lund@keep\-it\-simple.com>.

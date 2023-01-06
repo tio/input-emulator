@@ -1,0 +1,9 @@
+ * Add completion script
+
+ * Support various keyboard layouts (right now only dk layout is supported)
+
+ * Enable key, keydown, keyup with alias support (ctrl, alt, altgr, shift, enter, backspace, space)
+
+ * Add support for moving mouse input device with non-relative movements (if possible)
+
+ * Fix and reenable run script feature

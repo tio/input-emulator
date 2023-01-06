@@ -1,4 +1,4 @@
-project('keyboard-simulator', 'c',
+project('input-emulator', 'c',
     version : '0.1',
     license : [ 'GPL-2.0-or-later'],
     meson_version : '>= 0.53.2',
@@ -9,4 +9,4 @@ project('keyboard-simulator', 'c',
 version_date = '2023-1-5'
 
 subdir('src')
-# subdir('man')
+subdir('man')

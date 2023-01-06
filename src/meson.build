@@ -1,35 +1,48 @@
+# Generate configuration header
 config_h = configuration_data()
 config_h.set_quoted('VERSION', meson.project_version())
 configure_file(output: 'config.h', configuration: config_h)
 
-keyboard_simulator_sources = [
-  'keyboard-simulator.c'
+input_emulator_sources = [
+  'main.c',
+  'touch.c',
+  'keyboard.c',
+  'mouse.c',
+  'service.c',
+  'message.c',
+  'options.c',
+  'signals.c',
+  'filesystem.c',
+  'event.c',
 ]
 
-foreach name: ['lua-5.4', 'lua-5.3', 'lua-5.2', 'lua-5.1', 'lua']
-  lua_dep = dependency(name, version: '>=5.1', required: false)
-  if lua_dep.found()
-    break
-  endif
-endforeach
-if not lua_dep.found()
-  error('Lua could not be found!')
-endif
+input_emulator_c_args = ['-Wno-unused-result']
 
+# Test for rt library support
 compiler = meson.get_compiler('c')
 rt_dep = compiler.find_library('rt', required : true)
 
-keyboard_simulator_dep = [
+input_emulator_dep = [
   rt_dep,
-  lua_dep,
 ]
 
-keyboard_simulator_c_args = ['-Wno-unused-result']
+# Test for Lua support
+enable_lua = get_option('lua')
+if enable_lua
+  foreach name: ['lua-5.4', 'lua-5.3', 'lua-5.2', 'lua-5.1', 'lua']
+    lua_dep = dependency(name, version: '>=5.1', required: true)
+  if lua_dep.found()
+    input_emulator_c_args += '-DHAVE_LUA'
+    input_emulator_dep += lua_dep
+    break
+  endif
+endforeach
+endif
 
-executable('keyboard-simulator',
-  keyboard_simulator_sources,
-  c_args: keyboard_simulator_c_args,
-  dependencies: keyboard_simulator_dep,
+executable('input-emulator',
+  input_emulator_sources,
+  c_args: input_emulator_c_args,
+  dependencies: input_emulator_dep,
   install: true )
 
 # subdir('bash-completion')

@@ -1,5 +1,8 @@
 /*
- * Copyright (c) 2022  Martin Lund
+ * input-emulator - a simple input emulator
+ *
+ * Copyright (C) 2022-2023  Martin Lund
+ * Copyright (C) 2023  DEIF A/S
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -17,9 +20,7 @@
  * 02110-1301, USA.
  */
 
-#include <stdint.h>
+#pragma once
 
-void type_key(int fd, int16_t key);
-void type_string(int fd, char *string, int delay);
-void key_press(int fd, int key);
-void key_release(int fd, int key);
+void signal_handler(int signum);
+void signal_handlers_install(void);
