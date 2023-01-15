@@ -1,5 +1,8 @@
 # input-emulator - A simple input emulator for Linux
 
+[![](https://img.shields.io/github/v/release/tio/input-emulator?sort=semver)](https://github.com/tio/input-emulator/releases)
+[![](https://img.shields.io/tokei/lines/github/tio/input-emulator)](https://github.com/tio/input-emulator)
+
 ## 1. Introduction
 
 A simple input emulator which instructs the Linux kernel to create virtual
