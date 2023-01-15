@@ -12,7 +12,7 @@ script.
 
 Similar actions can be performed with existing tools but they are either
 bound to X (eg. xdotool) or operates with low level events (evemu-create,
-evemu-event, etc.) which make automation not as easy.
+evemu-event, etc.) which make scripted automation not as easy.
 
 ### 1.1 Motivation
 
