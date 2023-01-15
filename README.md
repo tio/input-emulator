@@ -77,7 +77,7 @@ Touch actions:
 
 ### 3.2 Examples
 
-#### 3.2. Touch example
+#### 3.2.1 Touch example
 ```
  $ input-emulator start touch --x-max 2560 --y-max 1440 --slots 4
  $ input-emulator touch tap 1280 720
