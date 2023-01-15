@@ -1,6 +1,6 @@
- * Add completion script
+ * Add bash completion script
 
- * Support various keyboard layouts (right now only dk layout is supported)
+ * Support various keyboard layouts (right now only DK layout is supported)
 
  * Enable key, keydown, keyup with alias support (ctrl, alt, altgr, shift, enter, backspace, space)
 
