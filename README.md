@@ -89,7 +89,7 @@ Touch actions:
 #### 3.2.2 Mouse example
 ```
  $ input-emulator start mouse --x-max 2560 --y-max 1440
- $ input-emulator mouse move 1280 720
+ $ input-emulator mouse move 200 -300
  $ input-emulator mouse click left
  $ input-emulator mouse down right
  $ input-emulator mouse up right

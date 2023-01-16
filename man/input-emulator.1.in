@@ -131,7 +131,7 @@ The same key aliases mentioned above are recognized.
 .B <x>
 .B <y>
 
-Move mouse to x,y coordinate.
+Move mouse by x,y points (relative movement).
 
 .TP
 .BR click
@@ -187,7 +187,7 @@ Touch example:
 .TP
 Mouse example:
  $ input-emulator mouse start --x-max 2560 --y-max 1440
- $ input-emulator mouse move 1280 720
+ $ input-emulator mouse move 200 -300
  $ input-emulator mouse click left
  $ input-emulator mouse down middle
  $ input-emulator mouse up middle
