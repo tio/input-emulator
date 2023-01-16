@@ -21,6 +21,10 @@
 
 #pragma once
 
+#include <wchar.h>
+
 #define UNUSED(expr) do { (void)(expr); } while (0)
 
 #define SYS_NAME_LENGTH_MAX 50
+
+wchar_t *convert_mbs_to_wcs(const char *string);

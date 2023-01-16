@@ -25,10 +25,14 @@
 #include <string.h>
 #include <getopt.h>
 #include <uchar.h>
+#include <wchar.h>
 #include <linux/uinput.h>
+#include <linux/input-event-codes.h>
 #include "options.h"
 #include "config.h"
 #include "print.h"
+#include "misc.h"
+#include "keyboard.h"
 
 option_t option =
 {
@@ -48,6 +52,7 @@ option_t option =
     .y = -1,
     .duration = 15,
     .daemonize = true,
+    .wc_string = NULL,
 };
 
 void options_help_print(void)
@@ -91,6 +96,40 @@ void options_help_print(void)
 void options_version_print(void)
 {
     printf("input-emulator v%s\n", VERSION);
+}
+
+static void option_kbd_key_action_resolve_key(wchar_t *wcs, uint32_t *key)
+{
+    if (wcslen(wcs) == 1)
+    {
+        uint32_t modifier;
+        wchar_to_key(option.wc_string[0], key, &modifier);
+    }
+    else if (wcscmp(wcs, L"ctrl") == 0)
+    {
+        option.key = KEY_LEFTCTRL;
+    }
+    else if (wcscmp(wcs, L"alt") == 0)
+    {
+        option.key = KEY_LEFTALT;
+    }
+    else if (wcscmp(wcs, L"altgr") == 0)
+    {
+        option.key = KEY_RIGHTALT;
+    }
+    else if (wcscmp(wcs, L"shift") == 0)
+    {
+        option.key = KEY_LEFTSHIFT;
+    }
+    else if (wcscmp(wcs, L"meta") == 0)
+    {
+        option.key = KEY_LEFTMETA;
+    }
+    else
+    {
+        error_printf("Invalid input\n");
+        exit(EXIT_FAILURE);
+    }
 }
 
 void options_parse(int argc, char *argv[])
@@ -169,31 +208,7 @@ void options_parse(int argc, char *argv[])
                 if (optind != argc)
                 {
                     option.string = strdup(argv[optind]);
-
-                    /* Convert input string to wide character string (wcs) */
-                    size_t mbs_length;
-
-                    mbs_length = mbstowcs(NULL, argv[optind], 0);
-                    if (mbs_length == (size_t) -1)
-                    {
-                        perror("mbstowcs");
-                        exit(EXIT_FAILURE);
-                    }
-
-                    option.wc_string = calloc(mbs_length + 1, sizeof(wchar_t));
-                    if (option.wc_string == NULL)
-                    {
-                        perror("calloc");
-                        exit(EXIT_FAILURE);
-                    }
-                    option.wc_string_length = mbs_length + 1;
-
-                    /* Convert the multibyte character string in str to a wide character string */
-                    if (mbstowcs(option.wc_string, argv[optind], mbs_length + 1) == (size_t) -1)
-                    {
-                        perror("mbstowcs");
-                        exit(EXIT_FAILURE);
-                    }
+                    option.wc_string = convert_mbs_to_wcs(argv[optind]);
 
                     optind++;
                     debug_printf("string = '%s'\n", option.string);
@@ -206,34 +221,37 @@ void options_parse(int argc, char *argv[])
                 optind++;
                 if (optind != argc)
                 {
-                    /* FIXME: This section needs to be fixed to handle UTF-8 better */
-                    debug_printf("length = %ld\n", strlen(argv[optind]));
-                    if (strlen(argv[optind]) == 2)
-                    {
-                        memcpy(&option.key, argv[optind] + 1, 1);
-                    }
-                    else
-                    {
-                        option.key = *argv[optind];
-                    }
+                    option.wc_string = convert_mbs_to_wcs(argv[optind]);
+                    option_kbd_key_action_resolve_key(option.wc_string, &option.key);
+
                     optind++;
-                    debug_printf("key = '%c'\n", option.key);
-                    debug_printf("key = '%x'\n", option.key);
                 }
             }
             else if (strcmp(argv[optind], "keydown") == 0)
             {
-                /* FIXME: Same UTF-8 issue as above */
                 debug_printf("keydown!\n");
                 option.kbd_action = KBD_KEYDOWN;
                 optind++;
+                if (optind != argc)
+                {
+                    option.wc_string = convert_mbs_to_wcs(argv[optind]);
+                    option_kbd_key_action_resolve_key(option.wc_string, &option.key);
+
+                    optind++;
+                }
             }
             else if (strcmp(argv[optind], "keyup") == 0)
             {
-                /* FIXME: Same UTF-8 issue as above */
                 debug_printf("keyup!\n");
                 option.kbd_action = KBD_KEYUP;
                 optind++;
+                if (optind != argc)
+                {
+                    option.wc_string = convert_mbs_to_wcs(argv[optind]);
+                    option_kbd_key_action_resolve_key(option.wc_string, &option.key);
+
+                    optind++;
+                }
             }
         }
     }

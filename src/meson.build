@@ -14,6 +14,7 @@ input_emulator_sources = [
   'signals.c',
   'filesystem.c',
   'event.c',
+  'misc.c',
 ]
 
 input_emulator_c_args = ['-Wno-unused-result']

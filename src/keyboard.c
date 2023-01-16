@@ -281,14 +281,14 @@ void keyboard_release(uint32_t key)
     emit(keyboard_fd, EV_SYN, SYN_REPORT, 0);
 }
 
-static int wchar_to_key(wchar_t c, uint32_t *key, uint32_t *modifier)
+int wchar_to_key(wchar_t wc, uint32_t *key, uint32_t *modifier)
 {
     int i = 0;
 
     /* Hardcoded to DK mapping for now */
     while (wchar_to_key_map_dk[i].wchar != 0)
     {
-        if (wchar_to_key_map_dk[i].wchar == c)
+        if (wchar_to_key_map_dk[i].wchar == wc)
         {
             // Found key
             *key = wchar_to_key_map_dk[i].key;
@@ -611,15 +611,16 @@ void do_keyboard_key_request(uint32_t key)
     msg_destroy(message);
 }
 
-void do_keyboard_key_requests(const wchar_t *wc_string, size_t length)
+void do_keyboard_key_requests(const wchar_t *wc_string)
 {
     uint32_t key;
     uint32_t modifier;
+    size_t length = wcslen(wc_string);
 
     /* Translate each wide character in wc string to uinput key stroke with any
      * modifiers (ALT_LEFTSHIFT, ALT_GR, etc) required */
 
-    for (size_t i = 0; i<(length-1); i++)
+    for (size_t i = 0; i<(length); i++)
     {
         debug_printf("wchar: %d\n", wc_string[i]);
         if (wchar_to_key(wc_string[i], &key, &modifier) == 0)

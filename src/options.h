@@ -79,8 +79,7 @@ typedef struct
     kbd_action_t kbd_action;
     char *string;
     wchar_t *wc_string;
-    ssize_t wc_string_length;
-    char16_t key;
+    uint32_t key;
     uint32_t type_delay;
     mouse_action_t mouse_action;
     int button;

@@ -247,7 +247,7 @@ int main(int argc, char *argv[])
                 case KBD_TYPE:
                     /* No single type request here as we translate input string
                      * into a sequence of key requests */
-                    do_keyboard_key_requests(option.wc_string, option.wc_string_length);
+                    do_keyboard_key_requests(option.wc_string);
                     break;
 
                 case KBD_NONE:

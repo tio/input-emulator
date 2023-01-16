@@ -1,7 +1,6 @@
 /*
  * input-emulator - a simple input emulator
  *
- * Copyright (C) 2023  Martin Lund
  * Copyright (C) 2023  DEIF A/S
  *
  * This program is free software; you can redistribute it and/or
@@ -20,28 +19,38 @@
  * 02110-1301, USA.
  */
 
-#pragma once
-
 #include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
+#include <string.h>
+#include <unistd.h>
+#include <wchar.h>
 
-#define error_printf(format, args...) \
-    fprintf(stderr, "Error: " format, ## args)
-#define error_printf_raw(format, args...) \
-    fprintf(stderr, "" format, ## args)
+wchar_t *convert_mbs_to_wcs(const char *string)
+{
+    wchar_t *wcs;
 
-#define warning_printf(format, args...) \
-    fprintf(stderr, "Warning: " format, ## args)
-#define warning_printf_raw(format, args...) \
-    fprintf(stderr, "" format, ## args)
+    size_t mbs_length;
 
-#define DEBUG
+    mbs_length = mbstowcs(NULL, string, 0);
+    if (mbs_length == (size_t) -1)
+    {
+        perror("mbstowcs");
+        exit(EXIT_FAILURE);
+    }
 
-#ifdef DEBUG
-#define debug_printf(format, args...) \
-    fprintf(stdout, "[debug] " format, ## args)
-#define debug_printf_raw(format, args...) \
-    fprintf(stdout, "" format, ## args)
-#else
-#define debug_printf(format, args...)
-#define debug_printf_raw(format, args...)
-#endif
+    wcs = calloc(mbs_length + 1, sizeof(wchar_t));
+    if (wcs == NULL)
+    {
+        perror("calloc");
+        exit(EXIT_FAILURE);
+    }
+
+    if (mbstowcs(wcs, string, mbs_length + 1) == (size_t) -1)
+    {
+        perror("mbstowcs");
+        exit(EXIT_FAILURE);
+    }
+
+    return wcs;
+}

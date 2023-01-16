@@ -95,28 +95,34 @@ Create multi touch input device with x,y resolution and maximum number of slots
 .SH "KEYBOARD ACTIONS"
 
 .TP 9n
-.BR key
-.B <key>
-
-Type a given key (press and release).
-
-.TP
 .BR type
 .B <string>
 
 Type a given string of characters.
 
 .TP
+.BR key
+.B <key|alias>
+
+Type a given key (press and release).
+
+The following key aliases are recognized: shift, ctrl, alt, altgr, meta.
+
+.TP
 .BR keydown
-.B <key>
+.B <key|alias>
 
 Press and hold a given key.
 
+The same key aliases mentioned above are recognized.
+
 .TP
 .BR keyup
-.B <key>
+.B <key|alias>
 
 Release a given key.
+
+The same key aliases mentioned above are recognized.
 
 .SH "MOUSE ACTIONS"
 

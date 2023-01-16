@@ -2,7 +2,7 @@
 
  * Support various keyboard layouts (right now only DK layout is supported)
 
- * Enable key, keydown, keyup with alias support (ctrl, alt, altgr, shift, enter, backspace, space)
+ * Add support for more key aliases (enter, backspace, home, end, pgdown, pgup, etc.)
 
  * Add support for moving mouse input device with non-relative movements (if possible)
 
