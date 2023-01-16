@@ -25,7 +25,7 @@ demonstration gifs.
 ## 2. features
 
  * Emulates the 3 arch type input devices: keyboard, mouse, and touch
- * Perform actions via command-line or script
+ * Perform actions via command-line
     * Keyboard actions: type, key, keydown, keyup
     * Mouse actions: move, click, down, up
     * Touch actions: tap
@@ -33,11 +33,13 @@ demonstration gifs.
  * Input devices are maintained by background service (default)
     * Allows stable input device name
     * Status of service can be queried via client
+ * Documented via man page
  * Supports various keyboard layouts (TODO, limited to DK for now)
  * Shell completion support (TODO)
- * Documented via man page
+ * Perform actions via script (TODO)
 
 ## 3. Usage
+
 ### 3.1 Command-line
 
 The command-line interface is straightforward as reflected in the output from 'input-emulator --help':
