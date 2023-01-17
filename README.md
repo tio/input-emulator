@@ -25,14 +25,14 @@ demonstration gifs.
 ## 2. features
 
  * Emulates the 3 arch type input devices: keyboard, mouse, and touch
- * Perform actions via command-line
+ * Perform device actions via command-line
     * Keyboard actions: type, key, keydown, keyup
     * Mouse actions: move, click, down, up
     * Touch actions: tap
  * Start/stop individual input device
  * Input devices are maintained by background service (default)
     * Allows stable input device name
-    * Status of service can be queried via client
+    * Status of service can be queried via command-line
  * Documented via man page
  * Supports various keyboard layouts (TODO, limited to DK for now)
  * Shell completion support (TODO)
@@ -111,20 +111,27 @@ Touch actions:
 ```
  $ input-emulator status
 ```
-#### 3.2.5 Run script example
+#### 3.2.5 Run script example (Not working yet)
 ```
  $ input-emulator run examples/keyboard-test.lua
 ```
 
-## 4. Installation
+## 4. Installation from source
 
-To build successfully with scripting support you need liblua-dev installed.
+Install steps:
 
 ```
  $ meson build
  $ meson compile -C build
  $ meson install -C build
 ```
+
+See meson_options.txt for tio specific build options.
+
+Note: The meson install steps may differ depending on your specific system and
+environment.
+
+Note: To build successfully with scripting support you need liblua-dev installed (optional).
 
 ## 4. Contribute
 
