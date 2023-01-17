@@ -126,10 +126,6 @@ int msg_send(void *message)
     // Send message via mq queue
     message_header_t *header = message;
 
-    // debug_printf("msg_send()\n");
-    // debug_printf("header->type = %d\n", header->type);
-    // debug_printf("header->payload_length = %d\n", header->payload_length);
-
     status = mq_send(mq, message, sizeof(message_header_t) + header->payload_length, 0);
     if (status == -1)
     {
@@ -150,12 +146,8 @@ int msg_receive(void **message)
     if (bytes_read < 0)
     {
         perror("mq_receive failure");
-        exit (EXIT_FAILURE);
+        exit(EXIT_FAILURE);
     }
-
-    // debug_printf("bytes_read = %ld\n", bytes_read);
-    // debug_printf("header->type = %d\n", header->type);
-    // debug_printf("header->payload_length = %d\n", header->payload_length);
 
     // Allocate message (header + payload) receive buffer
     *message = malloc(sizeof(message_header_t) + header->payload_length);

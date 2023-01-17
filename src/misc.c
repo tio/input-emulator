@@ -29,7 +29,6 @@
 wchar_t *convert_mbs_to_wcs(const char *string)
 {
     wchar_t *wcs;
-
     size_t mbs_length;
 
     mbs_length = mbstowcs(NULL, string, 0);
