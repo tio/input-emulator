@@ -4,3 +4,19 @@
 
 First release!
 
+Sponsored by DEIF A/S I have expanded the keyboard-simulator to also
+manage creation of virtual mouse and touch input devices through which
+high level mouse and touch actions (movement, clicks, gestures, etc.)
+can be performed via command-line or script. This is particular useful
+for test automation.
+
+Similar actions can be performed with existing tools but they are either
+bound to X (eg. xdotool) or operates with low level events
+(evemu-create, evemu-event, etc.) which make automation not as easy.
+
+A lot of code and new features have been added - too much to sumarize
+here. See the README or man page for more details.
+
+The new changes have resulted in the script feature being broken for
+now but it will eventually be fixed.
+
