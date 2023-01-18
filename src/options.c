@@ -123,6 +123,66 @@ static void option_kbd_key_action_resolve_key(wchar_t *wcs, uint32_t *key)
     {
         option.key = KEY_LEFTMETA;
     }
+    else if (wcscmp(wcs, L"enter") == 0)
+    {
+        option.key = KEY_ENTER;
+    }
+    else if (wcscmp(wcs, L"space") == 0)
+    {
+        option.key = KEY_SPACE;
+    }
+    else if (wcscmp(wcs, L"home") == 0)
+    {
+        option.key = KEY_HOME;
+    }
+    else if (wcscmp(wcs, L"end") == 0)
+    {
+        option.key = KEY_END;
+    }
+    else if (wcscmp(wcs, L"backspace") == 0)
+    {
+        option.key = KEY_BACKSPACE;
+    }
+    else if (wcscmp(wcs, L"pgdn") == 0)
+    {
+        option.key = KEY_PAGEDOWN;
+    }
+    else if (wcscmp(wcs, L"pgup") == 0)
+    {
+        option.key = KEY_PAGEUP;
+    }
+    else if (wcscmp(wcs, L"esc") == 0)
+    {
+        option.key = KEY_ESC;
+    }
+    else if (wcscmp(wcs, L"tab") == 0)
+    {
+        option.key = KEY_TAB;
+    }
+    else if (wcscmp(wcs, L"capslock") == 0)
+    {
+        option.key = KEY_CAPSLOCK;
+    }
+    else if (wcscmp(wcs, L"left") == 0)
+    {
+        option.key = KEY_LEFT;
+    }
+    else if (wcscmp(wcs, L"right") == 0)
+    {
+        option.key = KEY_RIGHT;
+    }
+    else if (wcscmp(wcs, L"up") == 0)
+    {
+        option.key = KEY_UP;
+    }
+    else if (wcscmp(wcs, L"down") == 0)
+    {
+        option.key = KEY_DOWN;
+    }
+    else if (wcscmp(wcs, L"delete") == 0)
+    {
+        option.key = KEY_DELETE;
+    }
     else
     {
         error_printf("Invalid input\n");

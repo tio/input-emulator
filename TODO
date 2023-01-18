@@ -2,8 +2,6 @@
 
  * Support various keyboard layouts (right now only DK layout is supported)
 
- * Add support for more key aliases (enter, backspace, home, end, pgdown, pgup, etc.)
-
  * Add support for moving mouse input device with non-relative movements (if possible)
 
  * Fix and reenable run script feature
