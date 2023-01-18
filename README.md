@@ -110,6 +110,10 @@ Touch actions:
 #### 3.2.4 Status example
 ```
  $ input-emulator status
+ Online devices:
+   kbd: /sys/devices/virtual/input/input44
+ mouse: /sys/devices/virtual/input/input46
+ touch: /sys/devices/virtual/input/input45
 ```
 #### 3.2.5 Run script example (Not working yet)
 ```
