@@ -1,6 +1,4 @@
 /*
- * input-emulator - a simple input emulator
- *
  * Copyright (C) 2023  DEIF A/S
  *
  * This program is free software; you can redistribute it and/or

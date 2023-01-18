@@ -1,7 +1,7 @@
 .TH "input-emulator" "1" "@version_date@" "input-emulator @version@" "User Commands"
 
 .SH "NAME"
-input-emulator \- a simple input device emulator
+input-emulator \- a scriptable input device emulator
 
 .SH "SYNOPSIS"
 .PP
@@ -13,10 +13,10 @@ input-emulator \- a simple input device emulator
 
 .SH "DESCRIPTION"
 .PP
-\fBinput-emulator\fR is a simple input device emulator tool which features a
-straightforward command-line interface to easily create input devices (keyboard,
-mouse, touch) and perform various high level actions (typing, moving,
-gesturiung, etc.) via injected input events.
+\fBinput-emulator\fR is a scriptable input emulator which instructs the Linux
+kernel to create virtual keyboard, mouse, and touch input devices through which
+one can perform various high level actions (typing, movement, gestures, etc.)
+via command-line or script.
 
 .SH "OPTIONS"
 

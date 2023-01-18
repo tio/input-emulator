@@ -1,6 +1,4 @@
 /*
- * input-emulator - a simple input emulator
- *
  * Copyright (C) 2022-2023  Martin Lund
  * Copyright (C) 2023  DEIF A/S
  *

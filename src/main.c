@@ -1,5 +1,5 @@
 /*
- * input-emulator - a simple input emulator
+ * input-emulator - a scriptable input emulator
  *
  * Copyright (C) 2023  DEIF A/S
  *

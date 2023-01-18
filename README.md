@@ -1,14 +1,14 @@
-# input-emulator - A simple input emulator for Linux
+# input-emulator - A scriptable input emulator
 
 [![](https://img.shields.io/github/v/release/tio/input-emulator?sort=semver)](https://github.com/tio/input-emulator/releases)
 [![](https://img.shields.io/tokei/lines/github/tio/input-emulator)](https://github.com/tio/input-emulator)
 
 ## 1. Introduction
 
-A simple input emulator which instructs the Linux kernel to create virtual
-keyboard, mouse, and touch input devices through which one can perform various
-high level actions (typing, movement, gestures, etc.) via command-line or
-script.
+A scriptable input emulator for Linux which instructs the kernel to create
+virtual keyboard, mouse, and touch input devices through which one can perform
+various high level actions (typing, movement, gestures, etc.) via command-line
+or script.
 
 Similar actions can be performed with existing tools but they are either
 bound to X (eg. xdotool) or operates with low level events (evemu-create,
