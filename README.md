@@ -56,7 +56,7 @@ Available commands:
   mouse <action> [args]              Do mouse action
   touch <action> [args]              Do touch action
   status                             Show status of virtual input devices
-  stop kbd|mouse|touch               Destroy virtual input device
+  stop kbd|mouse|touch|all           Destroy virtual input device
 
 Start options:
   -x, --x-max <int>                  Maximum x-coordinate (only for mouse and touch)
