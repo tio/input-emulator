@@ -40,6 +40,7 @@ typedef enum
     DEV_KEYBOARD,
     DEV_MOUSE,
     DEV_TOUCH,
+    DEV_ALL,
     DEV_NONE,
 } device_t;
 

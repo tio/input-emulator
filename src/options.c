@@ -66,7 +66,7 @@ void options_help_print(void)
     printf("  mouse <action> [args]              Do mouse action\n");
     printf("  touch <action> [args]              Do touch action\n");
     printf("  status                             Show status of virtual input devices\n");
-    printf("  stop kbd|mouse|touch               Destroy virtual input device\n");
+    printf("  stop kbd|mouse|touch|all           Destroy virtual input device\n");
     printf("\n");
     printf("Start options:\n");
     printf("  -x, --x-max <int>                  Maximum x-coordinate (only for mouse and touch)\n");
@@ -326,6 +326,12 @@ void options_parse(int argc, char *argv[])
                 option.device = DEV_TOUCH;
                 optind++;
             }
+
+            if ((option.command == CMD_STOP) && (strcmp(argv[optind], "all") == 0))
+            {
+                option.device = DEV_ALL;
+                optind++;
+            }
         }
 
         if (option.device == DEV_NONE)
@@ -336,7 +342,7 @@ void options_parse(int argc, char *argv[])
             }
             else
             {
-                error_printf("Please specify which device (kbd, mouse, touch) to stop\n");
+                error_printf("Please specify which device (kbd, mouse, touch, all) to stop\n");
             }
             exit(EXIT_FAILURE);
         }

@@ -142,6 +142,12 @@ void do_service_stop(void *message)
             touch_destroy();
             break;
 
+        case DEV_ALL:
+            keyboard_destroy();
+            mouse_destroy();
+            touch_destroy();
+            break;
+
         case DEV_NONE:
             break;
     }

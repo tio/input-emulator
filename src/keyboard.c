@@ -368,6 +368,8 @@ void keyboard_destroy(void)
      * Give userspace some time to read the events before we destroy the
      * device with UI_DEV_DESTROY.
      */
+    sleep(1);
+
     if (keyboard_fd < 0)
     {
         return;

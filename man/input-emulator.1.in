@@ -176,6 +176,11 @@ Destroy mouse input device.
 
 Destroy touch input device.
 
+.TP
+.BR all
+
+Destroy all input devices (quits daemon).
+
 .SH "EXAMPLES"
 
 .TP

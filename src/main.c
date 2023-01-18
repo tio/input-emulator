@@ -170,6 +170,7 @@ int main(int argc, char *argv[])
                         do_touch_start_request(option.x_max, option.y_max, option.slots);
                         break;
 
+                    case DEV_ALL:
                     case DEV_NONE:
                         break;
                 }
@@ -215,6 +216,7 @@ int main(int argc, char *argv[])
                     }
                     break;
 
+                case DEV_ALL:
                 case DEV_NONE:
                     break;
             }
@@ -311,6 +313,11 @@ int main(int argc, char *argv[])
                 case DEV_TOUCH:
                     do_service_stop_request(DEV_TOUCH);
                     break;
+
+                case DEV_ALL:
+                    do_service_stop_request(DEV_ALL);
+                    break;
+
 
                 case DEV_NONE:
                     break;
