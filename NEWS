@@ -1,5 +1,17 @@
 
-=== input-emulator v0.2 ===
+=== input-emulator v0.3 ===
+
+
+
+Changes since v0.2:
+
+ * Add more key aliases
+
+ * Add support for 'stop all' command
+
+   Introduce 'stop all' command which will destroy all input devices which
+   will make the daemon quit (daemon automatically quits when there are no
+   more input devices online to maintain).
 
 
 
