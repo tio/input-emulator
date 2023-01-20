@@ -106,8 +106,9 @@ Type a given string of characters.
 
 Type a given key (press and release).
 
-The following key aliases are recognized: shift, ctrl, alt, altgr, meta, enter,
-    space, home, end, backspace, pgdn, pgup, esc, tab, capslock, left, right, up, down, delete.
+The following key aliases are recognized:
+
+alt, altgr, backspace, capslock, compose, ctrl, delete, down, end, enter, esc, f1..f20, help, home, left, meta, playpause, pgdn, pgup, right, shift, space, stopcd, tab, up
 
 .TP
 .BR keydown

@@ -164,7 +164,63 @@ wchar_to_key_map_dk[] =
     { 230, KEY_SEMICOLON, 0}, // æ
     { 248, KEY_APOSTROPHE, 0}, // ø
 
-    { 0, 0, 0}, // The end
+    { 0, 0, 0}, // End of list
+};
+
+static struct alias_to_key_map_t
+{
+    wchar_t *alias;
+    uint32_t key;
+    uint32_t modifier;
+}
+alias_to_key_map_dk[] =
+{
+    { L"alt",       KEY_LEFTALT,   0},
+    { L"altgr",     KEY_RIGHTALT,  0},
+    { L"backspace", KEY_BACKSPACE, 0},
+    { L"capslock",  KEY_CAPSLOCK,  0},
+    { L"compose",   KEY_COMPOSE,   0},
+    { L"ctrl",      KEY_LEFTCTRL,  0},
+    { L"delete",    KEY_DELETE,    0},
+    { L"down",      KEY_DOWN,      0},
+    { L"end",       KEY_END,       0},
+    { L"enter",     KEY_ENTER,     0},
+    { L"esc",       KEY_ESC,       0},
+    { L"f1",        KEY_F1,        0},
+    { L"f2",        KEY_F2,        0},
+    { L"f3",        KEY_F3,        0},
+    { L"f4",        KEY_F4,        0},
+    { L"f5",        KEY_F5,        0},
+    { L"f6",        KEY_F6,        0},
+    { L"f7",        KEY_F7,        0},
+    { L"f8",        KEY_F8,        0},
+    { L"f9",        KEY_F9,        0},
+    { L"f10",       KEY_F10,       0},
+    { L"f11",       KEY_F11,       0},
+    { L"f12",       KEY_F12,       0},
+    { L"f13",       KEY_F13,       0},
+    { L"f14",       KEY_F14,       0},
+    { L"f15",       KEY_F15,       0},
+    { L"f16",       KEY_F16,       0},
+    { L"f17",       KEY_F17,       0},
+    { L"f18",       KEY_F18,       0},
+    { L"f19",       KEY_F19,       0},
+    { L"f20",       KEY_F20,       0},
+    { L"help",      KEY_HELP,      0},
+    { L"home",      KEY_HOME,      0},
+    { L"left",      KEY_LEFT,      0},
+    { L"meta",      KEY_LEFTMETA,  0},
+    { L"playpause", KEY_PLAYPAUSE, 0},
+    { L"pgdn",      KEY_PAGEDOWN,  0},
+    { L"pgup",      KEY_PAGEUP,    0},
+    { L"right",     KEY_RIGHT,     0},
+    { L"shift",     KEY_LEFTSHIFT, 0},
+    { L"space",     KEY_SPACE,     0},
+    { L"stopcd",    KEY_STOPCD,    0},
+    { L"tab",       KEY_TAB,       0},
+    { L"up",        KEY_UP,        0},
+
+    { NULL, 0, 0}, // End of list
 };
 
 /* All input key codes known to man */
@@ -299,92 +355,36 @@ int wchar_to_key(wchar_t wc, uint32_t *key, uint32_t *modifier)
     return -1;
 }
 
+int alias_to_key(wchar_t *wcs, uint32_t *key, uint32_t *modifier)
+{
+    int i = 0;
+
+    /* Hardcoded to DK mapping for now */
+    while (alias_to_key_map_dk[i].alias != NULL)
+    {
+        if (wcscmp(wcs, alias_to_key_map_dk[i].alias) == 0)
+        {
+            // Found key
+            *key = alias_to_key_map_dk[i].key;
+            *modifier = alias_to_key_map_dk[i].modifier;
+            return 0;
+        }
+        i++;
+    }
+
+    return -1;
+}
+
 void wchar_or_alias_to_key(wchar_t *wcs, uint32_t *key)
 {
+    uint32_t modifier;
+
     if (wcslen(wcs) == 1)
     {
-        uint32_t modifier;
-        wchar_to_key(option.wc_string[0], key, &modifier);
+        wchar_to_key(wcs[0], key, &modifier);
     }
-    else if (wcscmp(wcs, L"ctrl") == 0)
+    else if (alias_to_key(wcs, key, &modifier) == 0)
     {
-        option.key = KEY_LEFTCTRL;
-    }
-    else if (wcscmp(wcs, L"alt") == 0)
-    {
-        option.key = KEY_LEFTALT;
-    }
-    else if (wcscmp(wcs, L"altgr") == 0)
-    {
-        option.key = KEY_RIGHTALT;
-    }
-    else if (wcscmp(wcs, L"shift") == 0)
-    {
-        option.key = KEY_LEFTSHIFT;
-    }
-    else if (wcscmp(wcs, L"meta") == 0)
-    {
-        option.key = KEY_LEFTMETA;
-    }
-    else if (wcscmp(wcs, L"enter") == 0)
-    {
-        option.key = KEY_ENTER;
-    }
-    else if (wcscmp(wcs, L"space") == 0)
-    {
-        option.key = KEY_SPACE;
-    }
-    else if (wcscmp(wcs, L"home") == 0)
-    {
-        option.key = KEY_HOME;
-    }
-    else if (wcscmp(wcs, L"end") == 0)
-    {
-        option.key = KEY_END;
-    }
-    else if (wcscmp(wcs, L"backspace") == 0)
-    {
-        option.key = KEY_BACKSPACE;
-    }
-    else if (wcscmp(wcs, L"pgdn") == 0)
-    {
-        option.key = KEY_PAGEDOWN;
-    }
-    else if (wcscmp(wcs, L"pgup") == 0)
-    {
-        option.key = KEY_PAGEUP;
-    }
-    else if (wcscmp(wcs, L"esc") == 0)
-    {
-        option.key = KEY_ESC;
-    }
-    else if (wcscmp(wcs, L"tab") == 0)
-    {
-        option.key = KEY_TAB;
-    }
-    else if (wcscmp(wcs, L"capslock") == 0)
-    {
-        option.key = KEY_CAPSLOCK;
-    }
-    else if (wcscmp(wcs, L"left") == 0)
-    {
-        option.key = KEY_LEFT;
-    }
-    else if (wcscmp(wcs, L"right") == 0)
-    {
-        option.key = KEY_RIGHT;
-    }
-    else if (wcscmp(wcs, L"up") == 0)
-    {
-        option.key = KEY_UP;
-    }
-    else if (wcscmp(wcs, L"down") == 0)
-    {
-        option.key = KEY_DOWN;
-    }
-    else if (wcscmp(wcs, L"delete") == 0)
-    {
-        option.key = KEY_DELETE;
     }
     else
     {
@@ -392,7 +392,6 @@ void wchar_or_alias_to_key(wchar_t *wcs, uint32_t *key)
         exit(EXIT_FAILURE);
     }
 }
-
 
 int keyboard_create(void)
 {
