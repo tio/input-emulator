@@ -37,3 +37,4 @@ void do_keyboard_start(void *message);
 void do_keyboard_start_request(void);
 void do_keyboard_key_requests(const wchar_t *wc_string);
 int wchar_to_key(wchar_t wc, uint32_t *key, uint32_t *modifier);
+void wchar_or_alias_to_key(wchar_t *wcs, uint32_t *key);

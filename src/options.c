@@ -96,100 +96,6 @@ void options_version_print(void)
     printf("input-emulator v%s\n", VERSION);
 }
 
-static void option_kbd_key_action_resolve_key(wchar_t *wcs, uint32_t *key)
-{
-    if (wcslen(wcs) == 1)
-    {
-        uint32_t modifier;
-        wchar_to_key(option.wc_string[0], key, &modifier);
-    }
-    else if (wcscmp(wcs, L"ctrl") == 0)
-    {
-        option.key = KEY_LEFTCTRL;
-    }
-    else if (wcscmp(wcs, L"alt") == 0)
-    {
-        option.key = KEY_LEFTALT;
-    }
-    else if (wcscmp(wcs, L"altgr") == 0)
-    {
-        option.key = KEY_RIGHTALT;
-    }
-    else if (wcscmp(wcs, L"shift") == 0)
-    {
-        option.key = KEY_LEFTSHIFT;
-    }
-    else if (wcscmp(wcs, L"meta") == 0)
-    {
-        option.key = KEY_LEFTMETA;
-    }
-    else if (wcscmp(wcs, L"enter") == 0)
-    {
-        option.key = KEY_ENTER;
-    }
-    else if (wcscmp(wcs, L"space") == 0)
-    {
-        option.key = KEY_SPACE;
-    }
-    else if (wcscmp(wcs, L"home") == 0)
-    {
-        option.key = KEY_HOME;
-    }
-    else if (wcscmp(wcs, L"end") == 0)
-    {
-        option.key = KEY_END;
-    }
-    else if (wcscmp(wcs, L"backspace") == 0)
-    {
-        option.key = KEY_BACKSPACE;
-    }
-    else if (wcscmp(wcs, L"pgdn") == 0)
-    {
-        option.key = KEY_PAGEDOWN;
-    }
-    else if (wcscmp(wcs, L"pgup") == 0)
-    {
-        option.key = KEY_PAGEUP;
-    }
-    else if (wcscmp(wcs, L"esc") == 0)
-    {
-        option.key = KEY_ESC;
-    }
-    else if (wcscmp(wcs, L"tab") == 0)
-    {
-        option.key = KEY_TAB;
-    }
-    else if (wcscmp(wcs, L"capslock") == 0)
-    {
-        option.key = KEY_CAPSLOCK;
-    }
-    else if (wcscmp(wcs, L"left") == 0)
-    {
-        option.key = KEY_LEFT;
-    }
-    else if (wcscmp(wcs, L"right") == 0)
-    {
-        option.key = KEY_RIGHT;
-    }
-    else if (wcscmp(wcs, L"up") == 0)
-    {
-        option.key = KEY_UP;
-    }
-    else if (wcscmp(wcs, L"down") == 0)
-    {
-        option.key = KEY_DOWN;
-    }
-    else if (wcscmp(wcs, L"delete") == 0)
-    {
-        option.key = KEY_DELETE;
-    }
-    else
-    {
-        error_printf("Invalid input\n");
-        exit(EXIT_FAILURE);
-    }
-}
-
 void options_parse(int argc, char *argv[])
 {
     int c;
@@ -280,7 +186,7 @@ void options_parse(int argc, char *argv[])
                 if (optind != argc)
                 {
                     option.wc_string = convert_mbs_to_wcs(argv[optind]);
-                    option_kbd_key_action_resolve_key(option.wc_string, &option.key);
+                    wchar_or_alias_to_key(option.wc_string, &option.key);
 
                     optind++;
                 }
@@ -293,7 +199,7 @@ void options_parse(int argc, char *argv[])
                 if (optind != argc)
                 {
                     option.wc_string = convert_mbs_to_wcs(argv[optind]);
-                    option_kbd_key_action_resolve_key(option.wc_string, &option.key);
+                    wchar_or_alias_to_key(option.wc_string, &option.key);
 
                     optind++;
                 }
@@ -306,7 +212,7 @@ void options_parse(int argc, char *argv[])
                 if (optind != argc)
                 {
                     option.wc_string = convert_mbs_to_wcs(argv[optind]);
-                    option_kbd_key_action_resolve_key(option.wc_string, &option.key);
+                    wchar_or_alias_to_key(option.wc_string, &option.key);
 
                     optind++;
                 }
