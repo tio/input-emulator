@@ -86,6 +86,7 @@ void options_help_print(void)
     printf("  click left|middle|right            Click mouse button\n");
     printf("  down left|middle|right             Push mouse button down\n");
     printf("  up left|middle|right               Release mouse button\n");
+    printf("  scroll <ticks>                     Scroll mouse wheel number of ticks\n");
     printf("\n");
     printf("Touch actions:\n");
     printf("  tap <x> <y>                        Tap at x,y coordinate\n");
