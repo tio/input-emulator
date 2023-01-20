@@ -37,17 +37,10 @@
 #include "config.h"
 #include "misc.h"
 
-#ifdef HAVE_LUA
-#include <lua.h>
-#include <lauxlib.h>
-#include <lualib.h>
-#endif
-
 #define SHIFT  (1 << 14)
 #define ALT_GR (1 << 13)
 
 static int keyboard_fd = -1;
-static int type_delay = 0;
 static char sys_name[SYS_NAME_LENGTH_MAX];
 
 /* Map list of supportd wchar values (incomplete) */
@@ -484,140 +477,6 @@ const char* keyboard_sys_name(void)
 {
     return sys_name;
 }
-
-#ifdef HAVE_LUA
-
-// lua: key_press(key)
-static int lua_key_press(lua_State *L)
-{
-    int key = lua_tointeger(L, 1);
-
-    keyboard_press(key);
-
-    return 0;
-}
-
-// lua: key_release(key)
-static int lua_key_release(lua_State *L)
-{
-    int key = lua_tointeger(L, 1);
-
-    keyboard_release(key);
-
-    return 0;
-}
-
-// lua: set_type_delay(delay)
-static int lua_set_type_delay(lua_State *L)
-{
-    int delay = lua_tointeger(L, 1);
-
-    type_delay = delay;
-
-    return 0;
-}
-
-// lua: type(string, delay)
-static int lua_type_(lua_State *L)
-{
-    int delay;
-    const char *string = lua_tostring(L, 1);
-
-    if (lua_gettop(L) == 2)
-    {
-        delay = lua_tointeger(L, 2);
-    }
-    else
-    {
-        delay = type_delay;
-    }
-
-    type_string(string, delay);
-
-    return 0;
-}
-
-// lua: sleep(seconds)
-static int lua_sleep(lua_State *L)
-{
-    long seconds = lua_tointeger(L, 1);
-
-    sleep(seconds);
-
-    return 0;
-}
-
-// lua: msleep(miliseconds)
-static int lua_msleep(lua_State *L)
-{
-    long mseconds = lua_tointeger(L, 1);
-    long useconds = mseconds * 1000;
-
-    usleep(useconds);
-
-    return 0;
-}
-
-void lua_add_globals(lua_State *L)
-{
-    lua_pushnumber(L, KEY_LEFTCTRL);
-    lua_setglobal(L, "KEY_LEFTCTRL");
-}
-
-int lua_register_script_functions(lua_State *L)
-{
-    lua_register(L, "key_press", lua_key_press);
-    lua_register(L, "key_release", lua_key_release);
-    lua_register(L, "set_type_delay", lua_set_type_delay);
-    lua_register(L, "type", lua_type_);
-    lua_register(L, "sleep", lua_sleep);
-    lua_register(L, "msleep", lua_msleep);
-    return 0;
-}
-
-int run(char *filename)
-{
-    lua_State *L;
-
-    if (strlen(filename) == 0)
-    {
-        error_printf("Missing sript filename\n");
-        return -1;
-    }
-
-    /* Initialize lua */
-    L = luaL_newstate();
-    luaL_openlibs(L);
-
-    /* Prepare lua environment */
-    lua_register_script_functions(L);
-    lua_add_globals(L);
-
-    /* Run script file */
-    if (luaL_dofile(L, filename))
-    {
-        error_printf("%s\n", lua_tostring(L, -1));
-        lua_close(L);
-        return -1;
-    }
-
-    lua_close(L);
-
-    return 0;
-}
-
-#else
-
-int run(char *filename)
-{
-    UNUSED(filename);
-    type_delay = 0;
-
-    printf("Sorry, tool built without scripting support\n");
-    exit(EXIT_FAILURE);
-}
-
-#endif // HAVE_LUA
 
 void do_keyboard_start(void *message)
 {

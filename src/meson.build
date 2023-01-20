@@ -27,19 +27,6 @@ input_emulator_dep = [
   rt_dep,
 ]
 
-# Test for Lua support
-enable_lua = get_option('lua')
-if enable_lua
-  foreach name: ['lua-5.4', 'lua-5.3', 'lua-5.2', 'lua-5.1', 'lua']
-    lua_dep = dependency(name, version: '>=5.1', required: true)
-  if lua_dep.found()
-    input_emulator_c_args += '-DHAVE_LUA'
-    input_emulator_dep += lua_dep
-    break
-  endif
-endforeach
-endif
-
 executable('input-emulator',
   input_emulator_sources,
   c_args: input_emulator_c_args,

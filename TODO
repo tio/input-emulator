@@ -2,6 +2,4 @@
 
  * Add support for moving mouse input device with non-relative movements (if possible)
 
- * Fix and reenable run script feature
-
  * Add support for more touch actions (doubletap, fingerdown/fingerup <index>, moveto <x> <y>)

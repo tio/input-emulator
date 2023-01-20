@@ -7,8 +7,7 @@
 
 A scriptable input emulator for Linux which instructs the kernel to create
 virtual keyboard, mouse, and touch input devices through which one can perform
-various high level actions (typing, movement, gestures, etc.) via command-line
-or script.
+various high level actions (typing, movement, gestures, etc.) via command-line.
 
 Similar actions can be performed with existing tools but they are either
 bound to X (eg. xdotool) or operates with low level events (evemu-create,
@@ -115,10 +114,6 @@ Touch actions:
    kbd: /sys/devices/virtual/input/input44
  mouse: /sys/devices/virtual/input/input46
  touch: /sys/devices/virtual/input/input45
-```
-#### 3.2.5 Run script example (Not working yet)
-```
- $ input-emulator run examples/keyboard-test.lua
 ```
 
 ## 4. Installation from source
