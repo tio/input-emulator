@@ -46,4 +46,3 @@ executable('input-emulator',
   dependencies: input_emulator_dep,
   install: true )
 
-# subdir('bash-completion')

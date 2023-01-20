@@ -1,0 +1,88 @@
+#
+# Bash completion script for input-emulator
+#
+
+_input-emulator()
+{
+    local cur prev firstword opts start_opts kbd_opts mouse_opts touch_opts
+
+    COMPREPLY=()
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
+    firstword=$(get_firstword)
+
+    # The options we'll complete
+    opts="-h --help \
+          -v --version \
+          start \
+          kbd \
+          mouse \
+          touch \
+          status \
+          stop"
+
+    start_opts="-x --x-max \
+                -y --y-max \
+                -s --slots \
+                -n --no-daemonize
+                kbd \
+                mouse \
+                touch"
+
+    kbd_opts="type \
+              key \
+              keydown \
+              keyup"
+
+    mouse_opts="move \
+                click \
+                down \
+                up"
+
+    touch_opts="tap "
+
+    # Complete the options
+    case "${COMP_CWORD}" in
+        1)
+            COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
+            ;;
+        *)
+            case ${firstword} in
+                discover)
+                    COMPREPLY=( $(compgen -W "${start_opts}" -- ${cur}) )
+                    ;;
+                kbd)
+                    COMPREPLY=( $(compgen -W "${kbd_opts}" -- ${cur}) )
+                    ;;
+                mouse)
+                    COMPREPLY=( $(compgen -W "${mouse_opts}" -- ${cur}) )
+                    ;;
+                touch)
+                    COMPREPLY=( $(compgen -W "${touch_opts}" -- ${cur}) )
+                    ;;
+                *)
+                    COMPREPLY=()
+                    ;;
+            esac
+            ;;
+    esac
+
+    return 0
+}
+
+get_firstword() {
+    local firstword i
+
+    firstword=
+    for ((i = 1; i < ${#COMP_WORDS[@]}; ++i)); do
+        if [[ ${COMP_WORDS[i]} != -* ]]; then
+            firstword=${COMP_WORDS[i]}
+            break
+        fi
+    done
+
+    echo $firstword
+}
+
+# Bind completion to lxi command
+complete -o default -F _input-emulator input-emulator

@@ -10,3 +10,4 @@ version_date = '2023-1-17'
 
 subdir('src')
 subdir('man')
+subdir('bash-completion')
