@@ -1,5 +1,0 @@
-set_type_delay(50)
-msleep(500)
-type("Hello World!\r")
-type("ls -lah\r", 300)
-sleep(1)
