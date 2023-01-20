@@ -26,7 +26,7 @@ demonstration gifs.
  * Emulates the 3 arch type input devices: keyboard, mouse, and touch
  * Perform device actions via command-line
     * Keyboard actions: type, key, keydown, keyup
-    * Mouse actions: move, click, down, up
+    * Mouse actions: move, click, down, up, scroll
     * Touch actions: tap
  * Start/stop individual input device
  * Input devices are maintained by background service (default)
@@ -74,6 +74,7 @@ Mouse actions:
   click left|middle|right            Click mouse button
   down left|middle|right             Push mouse button down
   up left|middle|right               Release mouse button
+  scroll <ticks>                     Scroll mouse wheel number of ticks
 
 Touch actions:
   tap <x> <y>                        Tap at x,y coordinate
