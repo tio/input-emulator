@@ -95,6 +95,7 @@ Touch actions:
  $ input-emulator mouse click left
  $ input-emulator mouse down right
  $ input-emulator mouse up right
+ $ input-emulator mouse scroll -1
  $ input-emulator stop
 ```
 #### 3.2.3 Keyboard example

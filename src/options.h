@@ -59,6 +59,7 @@ typedef enum
     MOUSE_CLICK,
     MOUSE_DOWN,
     MOUSE_UP,
+    MOUSE_SCROLL,
     MOUSE_NONE,
 } mouse_action_t;
 
@@ -81,6 +82,7 @@ typedef struct
     uint32_t key;
     uint32_t type_delay;
     mouse_action_t mouse_action;
+    int32_t ticks;
     int button;
     touch_action_t touch_action;
     int32_t x;

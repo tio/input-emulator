@@ -44,6 +44,7 @@ option_t option =
     .key = 0,
     .type_delay = 40,
     .mouse_action = MOUSE_NONE,
+    .ticks = 0,
     .button = -1,
     .touch_action = TOUCH_NONE,
     .x = -1,
@@ -451,6 +452,16 @@ void options_parse(int argc, char *argv[])
                     {
                         option.button = BTN_RIGHT;
                     }
+                    optind++;
+                }
+            }
+            else if (strcmp(argv[optind], "scroll") == 0)
+            {
+                option.mouse_action = MOUSE_SCROLL;
+                optind++;
+                if (optind != argc)
+                {
+                    option.ticks = atoi(argv[optind]);
                     optind++;
                 }
             }

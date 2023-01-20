@@ -99,6 +99,19 @@ void mouse_click(int button)
     mouse_release(button);
 }
 
+void mouse_scroll(int32_t ticks)
+{
+    /* Do nothing if no device */
+    if (mouse_fd < 0)
+    {
+        return;
+    }
+
+    // Scroll wheel number of ticks
+    emit(mouse_fd, EV_REL, REL_WHEEL, ticks);
+    emit(mouse_fd, EV_SYN, SYN_REPORT, 0);
+}
+
 int mouse_create(int x_max, int y_max)
 {
     static struct uinput_setup usetup;
@@ -236,6 +249,29 @@ void do_mouse_click_request(int button)
     void *message = NULL;
 
     msg_create(&message, REQ_MOUSE_CLICK, &button, sizeof(button));
+    msg_send(message);
+    msg_destroy(message);
+}
+
+void do_mouse_scroll(void *message)
+{
+    message_header_t *header = message;
+    int32_t *ticks = message + sizeof(message_header_t);
+
+    if (header->payload_length != sizeof(int32_t))
+    {
+        warning_printf("Invalid payload length");
+        return;
+    }
+
+    mouse_scroll(*ticks);
+}
+
+void do_mouse_scroll_request(int32_t ticks)
+{
+    void *message = NULL;
+
+    msg_create(&message, REQ_MOUSE_SCROLL, &ticks, sizeof(ticks));
     msg_send(message);
     msg_destroy(message);
 }

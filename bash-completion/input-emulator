@@ -37,7 +37,8 @@ _input-emulator()
     mouse_opts="move \
                 click \
                 down \
-                up"
+                up \
+                scroll"
 
     touch_opts="tap "
 

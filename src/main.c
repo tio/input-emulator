@@ -89,6 +89,10 @@ void listen_for_messages(void)
                 do_mouse_up(message);
                 break;
 
+            case REQ_MOUSE_SCROLL:
+                do_mouse_scroll(message);
+                break;
+
             case REQ_TOUCH_START:
                 do_touch_start(message);
                 break;
@@ -275,6 +279,10 @@ int main(int argc, char *argv[])
 
                 case MOUSE_UP:
                     do_mouse_up_request(option.button);
+                    break;
+
+                case MOUSE_SCROLL:
+                    do_mouse_scroll_request(option.ticks);
                     break;
 
                 case MOUSE_NONE:

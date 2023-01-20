@@ -153,6 +153,12 @@ Press and keep mouse button (left, right, middle) down.
 
 Release mouse button (left, right, middle).
 
+.TP
+.BR scroll
+.B <ticks>
+
+Scroll mouse wheel number of ticks (negative for backwards, positive for forwards).
+
 .SH "TOUCH ACTIONS"
 
 .TP
@@ -198,6 +204,7 @@ Mouse example:
  $ input-emulator mouse click left
  $ input-emulator mouse down middle
  $ input-emulator mouse up middle
+ $ input-emulator mouse scroll -1
  $ input-emulator mouse stop
 
 

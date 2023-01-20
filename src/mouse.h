@@ -47,6 +47,8 @@ void do_mouse_down(void *message);
 void do_mouse_down_request(int button);
 void do_mouse_up(void *message);
 void do_mouse_up_request(int button);
+void do_mouse_scroll(void *message);
+void do_mouse_scroll_request(int32_t ticks);
 void do_mouse_move(void *message);
 void do_mouse_move_request(int32_t x, int32_t y);
 void do_mouse_start_request(uint32_t x_max, uint32_t y_max);
