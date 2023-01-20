@@ -34,8 +34,7 @@ demonstration gifs.
     * Status of service can be queried via command-line
  * Documented via man page
  * Supports various keyboard layouts (TODO, limited to DK for now)
- * Shell completion support (TODO)
- * Perform actions via script (TODO)
+ * Shell completion support (bash)
 
 ## 3. Usage
 
@@ -131,8 +130,6 @@ See meson_options.txt for tio specific build options.
 
 Note: The meson install steps may differ depending on your specific system and
 environment.
-
-Note: To build successfully with scripting support you need liblua-dev installed (optional).
 
 ## 4. Contribute
 
