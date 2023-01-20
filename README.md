@@ -126,7 +126,7 @@ Install steps:
  $ meson install -C build
 ```
 
-See meson_options.txt for tio specific build options.
+See meson_options.txt for input-emulator specific build options.
 
 Note: The meson install steps may differ depending on your specific system and
 environment.
