@@ -1,5 +1,42 @@
 
-=== input-emulator v0.3 ===
+=== input-emulator v0.4 ===
+
+
+
+Changes since v0.3:
+
+ * Make sure commands are performed synchronously
+
+   When scripting commands, request messages would pile up and overflow the
+   message queue resulting in crash or errors. To avoid this we now wait
+   for each command to finish (wait for ok response) before firing the next
+   command.
+
+ * Fix stop command crash
+
+ * Wait for service to be fully initialized before exit
+
+   To prevent command-line client from making request before service is
+   fully initialized.
+
+ * Make sure only one client is talking to server at a time
+
+ * Update kbd example
+
+ * Update README
+
+ * Remove lua script code
+
+   Can be reintroduced if needed. For now everything is perfectly
+   scriptable via command-line commands.
+
+ * Add 'mouse scroll <ticks>' command
+
+ * Add bash completion script
+
+ * Add alias_to_key() and more aliases
+
+ * Move code to keyboard
 
 
 
