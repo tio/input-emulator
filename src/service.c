@@ -107,18 +107,6 @@ void daemonize(void)
     freopen( "/dev/null", "w", stderr);
 }
 
-void do_service_stop_request(device_t device)
-{
-    void *message = NULL;
-
-    debug_printf("Sending stop message!\n");
-
-    msg_create(&message, REQ_STOP, &device, sizeof(device));
-
-    msg_send(message);
-    msg_destroy(message);
-}
-
 void do_service_stop(void *message)
 {
     message_header_t *header = message;
@@ -153,6 +141,22 @@ void do_service_stop(void *message)
         case DEV_NONE:
             break;
     }
+
+    msg_send_rsp_ok();
+}
+
+void do_service_stop_request(device_t device)
+{
+    void *message = NULL;
+
+    debug_printf("Sending stop message!\n");
+
+    msg_create(&message, REQ_STOP, &device, sizeof(device));
+
+    msg_send(message);
+    msg_destroy(message);
+
+    msg_receive_rsp_ok();
 }
 
 void do_service_status(void *message)

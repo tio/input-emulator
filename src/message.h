@@ -45,6 +45,8 @@ typedef enum
     RSP_STATUS,
     REQ_STOP,
     RSP_STOP,
+    RSP_OK,
+    RSP_ERROR,
 } message_type_t;
 
 void message_queue_server_open(void);
@@ -55,3 +57,5 @@ int msg_create(void **message, message_type_t type, void *payload, uint32_t payl
 void msg_destroy(void *message);
 int msg_send(void *message);
 int msg_receive(void **message);
+void msg_send_rsp_ok(void);
+void msg_receive_rsp_ok(void);

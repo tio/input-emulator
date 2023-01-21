@@ -242,6 +242,8 @@ void do_mouse_click(void *message)
     }
 
     mouse_click(*button);
+
+    msg_send_rsp_ok();
 }
 
 void do_mouse_click_request(int button)
@@ -251,6 +253,8 @@ void do_mouse_click_request(int button)
     msg_create(&message, REQ_MOUSE_CLICK, &button, sizeof(button));
     msg_send(message);
     msg_destroy(message);
+
+    msg_receive_rsp_ok();
 }
 
 void do_mouse_scroll(void *message)
@@ -265,6 +269,8 @@ void do_mouse_scroll(void *message)
     }
 
     mouse_scroll(*ticks);
+
+    msg_send_rsp_ok();
 }
 
 void do_mouse_scroll_request(int32_t ticks)
@@ -274,6 +280,8 @@ void do_mouse_scroll_request(int32_t ticks)
     msg_create(&message, REQ_MOUSE_SCROLL, &ticks, sizeof(ticks));
     msg_send(message);
     msg_destroy(message);
+
+    msg_receive_rsp_ok();
 }
 
 void do_mouse_down(void *message)
@@ -288,6 +296,8 @@ void do_mouse_down(void *message)
     }
 
     mouse_press(*button);
+
+    msg_send_rsp_ok();
 }
 
 void do_mouse_down_request(int button)
@@ -297,6 +307,8 @@ void do_mouse_down_request(int button)
     msg_create(&message, REQ_MOUSE_DOWN, &button, sizeof(button));
     msg_send(message);
     msg_destroy(message);
+
+    msg_receive_rsp_ok();
 }
 
 void do_mouse_up(void *message)
@@ -311,6 +323,8 @@ void do_mouse_up(void *message)
     }
 
     mouse_release(*button);
+
+    msg_send_rsp_ok();
 }
 
 void do_mouse_up_request(int button)
@@ -320,6 +334,8 @@ void do_mouse_up_request(int button)
     msg_create(&message, REQ_MOUSE_UP, &button, sizeof(button));
     msg_send(message);
     msg_destroy(message);
+
+    msg_receive_rsp_ok();
 }
 
 void do_mouse_move(void *message)
@@ -334,6 +350,8 @@ void do_mouse_move(void *message)
     }
 
     mouse_move(move->x, move->y);
+
+    msg_send_rsp_ok();
 }
 
 void do_mouse_move_request(int32_t x, int32_t y)
@@ -347,6 +365,8 @@ void do_mouse_move_request(int32_t x, int32_t y)
     msg_create(&message, REQ_MOUSE_MOVE, &mouse_move_data, sizeof(mouse_move_data_t));
     msg_send(message);
     msg_destroy(message);
+
+    msg_receive_rsp_ok();
 }
 
 void do_mouse_start(void *message)
@@ -361,6 +381,8 @@ void do_mouse_start(void *message)
     }
 
     mouse_create(data->x_max, data->y_max);
+
+    msg_send_rsp_ok();
 }
 
 void do_mouse_start_request(uint32_t x_max, uint32_t y_max)
@@ -376,5 +398,7 @@ void do_mouse_start_request(uint32_t x_max, uint32_t y_max)
     msg_create(&message, REQ_MOUSE_START, &data, sizeof(data));
     msg_send(message);
     msg_destroy(message);
+
+    msg_receive_rsp_ok();
 }
 

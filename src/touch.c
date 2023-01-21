@@ -201,6 +201,8 @@ void do_touch_tap(void *message)
 
     debug_printf("Touch tap at %d,%d for %d ms\n", tap->x, tap->y, tap->duration);
     touch_tap(tap->x, tap->y, tap->duration);
+
+    msg_send_rsp_ok();
 }
 
 void do_touch_tap_request(uint32_t x, uint32_t y, uint32_t duration)
@@ -217,6 +219,8 @@ void do_touch_tap_request(uint32_t x, uint32_t y, uint32_t duration)
     msg_create(&message, REQ_TOUCH_TAP, &touch_tap_data, sizeof(touch_tap_data_t));
     msg_send(message);
     msg_destroy(message);
+
+    msg_receive_rsp_ok();
 }
 
 void do_touch_start(void *message)
@@ -231,6 +235,8 @@ void do_touch_start(void *message)
     }
 
     touch_create(data->x_max, data->y_max, data->slots);
+
+    msg_send_rsp_ok();
 }
 
 void do_touch_start_request(uint32_t x_max, uint32_t y_max, uint8_t slots)
@@ -245,5 +251,7 @@ void do_touch_start_request(uint32_t x_max, uint32_t y_max, uint8_t slots)
     msg_create(&message, REQ_TOUCH_START, &data, sizeof(data));
     msg_send(message);
     msg_destroy(message);
+
+    msg_receive_rsp_ok();
 }
 

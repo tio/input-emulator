@@ -482,6 +482,8 @@ void do_keyboard_start(void *message)
 {
     UNUSED(message);
     keyboard_create();
+
+    msg_send_rsp_ok();
 }
 
 void do_keyboard_start_request(void)
@@ -491,6 +493,8 @@ void do_keyboard_start_request(void)
     msg_create(&message, REQ_KBD_START, NULL, 0);
     msg_send(message);
     msg_destroy(message);
+
+    msg_receive_rsp_ok();
 }
 
 void do_keyboard_keydown(void *message)
@@ -505,6 +509,8 @@ void do_keyboard_keydown(void *message)
     }
 
     keyboard_press(*key);
+
+    msg_send_rsp_ok();
 }
 
 void do_keyboard_keydown_request(uint32_t key)
@@ -514,6 +520,8 @@ void do_keyboard_keydown_request(uint32_t key)
     msg_create(&message, REQ_KBD_KEYDOWN, &key, sizeof(key));
     msg_send(message);
     msg_destroy(message);
+
+    msg_receive_rsp_ok();
 }
 
 void do_keyboard_keyup(void *message)
@@ -528,6 +536,8 @@ void do_keyboard_keyup(void *message)
     }
 
     keyboard_release(*key);
+
+    msg_send_rsp_ok();
 }
 
 void do_keyboard_keyup_request(uint32_t key)
@@ -537,6 +547,8 @@ void do_keyboard_keyup_request(uint32_t key)
     msg_create(&message, REQ_KBD_KEYUP, &key, sizeof(key));
     msg_send(message);
     msg_destroy(message);
+
+    msg_receive_rsp_ok();
 }
 
 void do_keyboard_key(void *message)
@@ -553,6 +565,8 @@ void do_keyboard_key(void *message)
     keyboard_press(*key);
     usleep(14*1000);
     keyboard_release(*key);
+
+    msg_send_rsp_ok();
 }
 
 void do_keyboard_key_request(uint32_t key)
@@ -562,6 +576,8 @@ void do_keyboard_key_request(uint32_t key)
     msg_create(&message, REQ_KBD_KEY, &key, sizeof(key));
     msg_send(message);
     msg_destroy(message);
+
+    msg_receive_rsp_ok();
 }
 
 void do_keyboard_key_requests(const wchar_t *wc_string)

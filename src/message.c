@@ -178,3 +178,34 @@ int msg_receive(void **message)
 
     return 0;
 }
+
+void msg_send_rsp_ok(void)
+{
+    void *message = NULL;
+
+    // Send response
+    msg_create(&message, RSP_OK, NULL, 0);
+    msg_send(message);
+    msg_destroy(message);
+}
+
+void msg_receive_rsp_ok(void)
+{
+    void *message = NULL;
+    message_header_t *header;
+
+    // Receive response
+    msg_receive(&message);
+    header = message;
+    if (header->type == RSP_ERROR)
+    {
+        // char *rsp_text = message + sizeof(message_header_t);
+        // error_printf("%s", rsp_text);
+    }
+    else if (header->type != RSP_OK)
+    {
+        warning_printf("Invalid message type received\n");
+    }
+
+    msg_destroy(message);
+}
