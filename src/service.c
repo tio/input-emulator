@@ -66,6 +66,8 @@ void daemonize(void)
     /* If we got a good PID, then we can exit the parent process. */
     if (pid > 0)
     {
+        /* Wait some time for everything to have been initialized */
+        sleep(2);
         exit(EXIT_SUCCESS);
     }
 
