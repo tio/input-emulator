@@ -67,7 +67,7 @@ void daemonize(void)
     if (pid > 0)
     {
         /* Wait some time for everything to have been initialized */
-        sleep(2);
+        sleep(3);
         exit(EXIT_SUCCESS);
     }
 
