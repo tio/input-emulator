@@ -294,11 +294,13 @@ void options_parse(int argc, char *argv[])
                 option.device = DEV_TOUCH;
                 optind++;
             }
-
-            if ((option.command == CMD_STOP) && (strcmp(argv[optind], "all") == 0))
+            else if (strcmp(argv[optind],"all") == 0)
             {
-                option.device = DEV_ALL;
-                optind++;
+                if (option.command == CMD_STOP)
+                {
+                    option.device = DEV_ALL;
+                    optind++;
+                }
             }
         }
 
