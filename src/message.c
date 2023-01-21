@@ -22,7 +22,9 @@
 #include <string.h>
 #include <fcntl.h>
 #include <sys/stat.h>
+#include <sys/file.h>
 #include <mqueue.h>
+#include <errno.h>
 #include "message.h"
 #include "print.h"
 
@@ -53,6 +55,8 @@ void message_queue_server_open(void)
 
 void message_queue_client_open(void)
 {
+    int status;
+
     debug_printf("Client opening queue\n");
 
     /* Open message queue */
@@ -60,6 +64,14 @@ void message_queue_client_open(void)
     {
         perror("mq_open() failure");
         exit (EXIT_FAILURE);
+    }
+
+    /* Put advisory lock on message queue file so we don't open it if already open (busy) */
+    status = flock(mq, LOCK_EX | LOCK_NB);
+    if ((status == -1) && (errno == EWOULDBLOCK))
+    {
+        perror("Device file is locked by another process");
+        exit(EXIT_FAILURE);
     }
 }
 
@@ -77,6 +89,7 @@ void message_queue_client_close(void)
     debug_printf("Client closing mqueue\n");
 
     /* Cleanup */
+    flock(mq, LOCK_UN);
     mq_close(mq);
 }
 
