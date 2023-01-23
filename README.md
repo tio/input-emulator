@@ -116,8 +116,9 @@ Touch actions:
  touch: /sys/devices/virtual/input/input45
 ```
 
-## 4. Installation from source
+## 4. Installation
 
+### 4.1 Installation from source
 Install steps:
 
 ```
@@ -131,11 +132,36 @@ See meson_options.txt for input-emulator specific build options.
 Note: The meson install steps may differ depending on your specific system and
 environment.
 
-## 4. Contribute
+### 4.2 Set up permissions for /dev/uinput
+
+To run input-emulator successfully as a normal user it needs access to the dev
+uinput /dev/uinput device. This is often permission protected so to gain access
+you can do the following:
+
+Create an uinput group:
+```
+$ sudo groupdadd -f uinput
+```
+
+Add user to group:
+```
+usermod -a -G uinput <username>
+```
+
+Create a udev rule /etc/udev/rules.d/99-input.rules containing:
+```
+KERNEL==”uinput”, GROUP=”uinput”, MODE:=”0660″
+```
+
+Then reboot computer and your user should have rw access to /dev/uinput and
+input-emulator should work as intended.
+
+
+## 5. Contribute
 
 Feel free to improve the implementation. It is open source and released under
 the GPLv2 license.
 
-## 5. Sponsors
+## 6. Sponsors
 
  * DEIF A/S
