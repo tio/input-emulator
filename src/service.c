@@ -46,7 +46,7 @@ bool devices_online(void)
 
 bool service_running(void)
 {
-   return file_exists("/dev/mqueue/input-emulator");
+   return file_exists("/dev/mqueue/input-emulator-srv-in");
 }
 
 void daemonize(void)

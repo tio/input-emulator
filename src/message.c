@@ -28,16 +28,18 @@
 #include "message.h"
 #include "print.h"
 
-#define QUEUE_NAME  "/input-emulator"
+#define QUEUE_NAME_SRV_OUT  "/input-emulator-srv-out"
+#define QUEUE_NAME_SRV_IN   "/input-emulator-srv-in"
 #define MAX_SIZE    1024
 
-static mqd_t mq;
+static mqd_t mq_out;
+static mqd_t mq_in;
 
 void message_queue_server_open(void)
 {
     struct mq_attr attr;
 
-    debug_printf("Server opening queue\n");
+    debug_printf("Server opening message queues\n");
 
     /* Initialize queue attributes */
     attr.mq_flags = 0;
@@ -45,8 +47,15 @@ void message_queue_server_open(void)
     attr.mq_msgsize = MAX_SIZE;
     attr.mq_curmsgs = 0;
 
-    /* Create message queue */
-    if ((mq = mq_open(QUEUE_NAME, O_CREAT | O_RDWR | O_EXCL, 0644, &attr) ) == -1)
+    /* Create outgoing message queue */
+    if ((mq_out = mq_open(QUEUE_NAME_SRV_OUT, O_CREAT | O_WRONLY | O_EXCL, 0644, &attr) ) == -1)
+    {
+        perror("mq_open() failure");
+        exit (EXIT_FAILURE);
+    }
+
+    /* Create incoming message queue */
+    if ((mq_in = mq_open(QUEUE_NAME_SRV_IN, O_CREAT | O_RDONLY | O_EXCL, 0644, &attr) ) == -1)
     {
         perror("mq_open() failure");
         exit (EXIT_FAILURE);
@@ -57,17 +66,24 @@ void message_queue_client_open(void)
 {
     int status;
 
-    debug_printf("Client opening queue\n");
+    debug_printf("Client opening queues\n");
 
-    /* Open message queue */
-    if ((mq = mq_open(QUEUE_NAME, O_RDWR) ) == -1)
+    /* Open incoming message queue */
+    if ((mq_in = mq_open(QUEUE_NAME_SRV_OUT, O_RDONLY) ) == -1)
+    {
+        perror("mq_open() failure");
+        exit (EXIT_FAILURE);
+    }
+
+    /* Open outgoing message queue */
+    if ((mq_out = mq_open(QUEUE_NAME_SRV_IN, O_WRONLY) ) == -1)
     {
         perror("mq_open() failure");
         exit (EXIT_FAILURE);
     }
 
     /* Put advisory lock on message queue file so we don't open it if already open (busy) */
-    status = flock(mq, LOCK_EX | LOCK_NB);
+    status = flock(mq_in, LOCK_EX | LOCK_NB);
     if ((status == -1) && (errno == EWOULDBLOCK))
     {
         perror("Device file is locked by another process");
@@ -80,8 +96,10 @@ void message_queue_server_close(void)
     debug_printf("Server closing mqueue\n");
 
     /* Cleanup */
-    mq_close(mq);
-    mq_unlink(QUEUE_NAME);
+    mq_close(mq_out);
+    mq_unlink(QUEUE_NAME_SRV_OUT);
+    mq_close(mq_in);
+    mq_unlink(QUEUE_NAME_SRV_IN);
 }
 
 void message_queue_client_close(void)
@@ -89,8 +107,9 @@ void message_queue_client_close(void)
     debug_printf("Client closing mqueue\n");
 
     /* Cleanup */
-    flock(mq, LOCK_UN);
-    mq_close(mq);
+    mq_close(mq_out);
+    flock(mq_in, LOCK_UN);
+    mq_close(mq_in);
 }
 
 int msg_create(
@@ -137,7 +156,7 @@ int msg_send(void *message)
     // Send message via mq queue
     message_header_t *header = message;
 
-    status = mq_send(mq, message, sizeof(message_header_t) + header->payload_length, 0);
+    status = mq_send(mq_out, message, sizeof(message_header_t) + header->payload_length, 0);
     if (status == -1)
     {
         perror("msg_send() failed");
@@ -153,7 +172,7 @@ int msg_receive(void **message)
     message_header_t *header = (message_header_t *)buffer;
 
     /* Receive message */
-    bytes_read = mq_receive(mq, buffer, MAX_SIZE, NULL);
+    bytes_read = mq_receive(mq_in, buffer, MAX_SIZE, NULL);
     if (bytes_read < 0)
     {
         perror("mq_receive failure");
