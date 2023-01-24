@@ -1,5 +1,19 @@
 
-=== input-emulator v0.4 ===
+=== input-emulator v0.5 ===
+
+
+
+Changes since v0.4:
+
+ * Add kbd and mouse example
+
+ * Rename keyboard-test.sh -> kbd-test.sh
+
+ * Fix server/client communication
+
+ * Update README
+
+ * Update keyboard example
 
 
 
