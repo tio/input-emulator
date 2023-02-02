@@ -45,4 +45,7 @@ void do_touch_tap(void *message);
 void do_touch_tap_request(uint32_t x, uint32_t y, uint32_t duration);
 void do_touch_start(void *message);
 void do_touch_start_request(uint32_t x_max, uint32_t y_max, uint8_t slots);
+int touch_x_max(void);
+int touch_y_max(void);
+int touch_slots(void);
 

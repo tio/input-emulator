@@ -36,6 +36,18 @@
 
 static int mouse_fd = -1;
 static char sys_name[SYS_NAME_LENGTH_MAX];
+static int mouse_config_x_max;
+static int mouse_config_y_max;
+
+int mouse_x_max(void)
+{
+    return mouse_config_x_max;
+}
+
+int mouse_y_max(void)
+{
+    return mouse_config_y_max;
+}
 
 void mouse_move(int x_rel, int y_rel)
 {
@@ -117,6 +129,9 @@ int mouse_create(int x_max, int y_max)
     static struct uinput_setup usetup;
     static struct uinput_abs_setup abs_setup;
 
+    mouse_config_x_max = x_max;
+    mouse_config_x_max = x_max;
+
     if (mouse_fd >= 0)
     {
         /* Mouse already started */
@@ -182,7 +197,7 @@ int mouse_create(int x_max, int y_max)
 
     device_ref_count++;
 
-    debug_printf("Created mouse input device with x-max=%d, y-max=%d\n", x_max, y_max);
+    debug_printf("Created mouse input device with x-max=%d y-max=%d\n", x_max, y_max);
 
     /* Save sys name */
     do_ioctl(mouse_fd, UI_GET_SYSNAME(50), sys_name);

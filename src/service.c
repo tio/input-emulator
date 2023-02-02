@@ -176,13 +176,24 @@ void do_service_status(void *message)
 
     if (mouse_online())
     {
-        sprintf(rsp_text_p, "mouse: %s/%s\n", sys_path, mouse_sys_name());
+        sprintf(rsp_text_p,
+                "mouse: %s/%s (x-max: %d y-max: %d)\n",
+                sys_path,
+                mouse_sys_name(),
+                mouse_x_max(),
+                mouse_y_max());
         rsp_text_p += strlen(rsp_text_p);
     }
 
     if (touch_online())
     {
-        sprintf(rsp_text_p, "touch: %s/%s\n", sys_path, touch_sys_name());
+        sprintf(rsp_text_p,
+                "touch: %s/%s (x-max: %d y-max: %d slots: %d)\n",
+                sys_path,
+                touch_sys_name(),
+                touch_x_max(),
+                touch_y_max(),
+                touch_slots());
     }
 
     // Send response

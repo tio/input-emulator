@@ -38,6 +38,24 @@
 static int touch_fd = -1;
 static uint32_t touch_id = 0;
 static char sys_name[SYS_NAME_LENGTH_MAX];
+static int touch_config_x_max;
+static int touch_config_y_max;
+static int touch_config_slots;
+
+int touch_x_max(void)
+{
+    return touch_config_x_max;
+}
+
+int touch_y_max(void)
+{
+    return touch_config_y_max;
+}
+
+int touch_slots(void)
+{
+    return touch_config_slots;
+}
 
 bool touch_online(void)
 {
@@ -77,6 +95,10 @@ int touch_create(int x_max, int y_max, int slots)
 {
     static struct uinput_setup usetup;
     static struct uinput_abs_setup abs_setup;
+
+    touch_config_x_max = x_max;
+    touch_config_y_max = y_max;
+    touch_config_x_max = x_max;
 
     if (touch_fd >= 0)
     {

@@ -53,4 +53,5 @@ void do_mouse_move(void *message);
 void do_mouse_move_request(int32_t x, int32_t y);
 void do_mouse_start_request(uint32_t x_max, uint32_t y_max);
 void do_mouse_start(void *message);
-
+int mouse_x_max(void);
+int mouse_y_max(void);
