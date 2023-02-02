@@ -32,8 +32,6 @@
 #define warning_printf_raw(format, args...) \
     fprintf(stderr, "" format, ## args)
 
-// #define DEBUG
-
 #ifdef DEBUG
 #define debug_printf(format, args...) \
     fprintf(stdout, "[debug] " format, ## args)

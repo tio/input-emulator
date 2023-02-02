@@ -4,9 +4,13 @@
 
 #include <stdio.h>
 #include "print.h"
+#include "misc.h"
 
 void debug_print_hex_dump(void *data, int length)
 {
+
+#ifdef DEBUG
+
     char *bufferp = data;
     int i;
 
@@ -27,4 +31,12 @@ void debug_print_hex_dump(void *data, int length)
         debug_printf_raw("0x%02x ", (unsigned char) bufferp[i]);
     }
     debug_printf_raw("\n");
+
+#else
+
+    UNUSED(data);
+    UNUSED(length);
+
+#endif
+
 }

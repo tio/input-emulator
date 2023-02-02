@@ -20,6 +20,11 @@ input_emulator_sources = [
 
 input_emulator_c_args = ['-Wno-unused-result']
 
+enable_debug = get_option('enable-debug')
+if enable_debug
+  input_emulator_c_args += '-DDEBUG'
+endif
+
 # Test for rt library support
 compiler = meson.get_compiler('c')
 rt_dep = compiler.find_library('rt', required : true)
