@@ -1,5 +1,25 @@
 
-=== input-emulator v0.5 ===
+=== input-emulator v0.6 ===
+
+
+Changes since v0.5:
+
+ * Add meson option to enable runtime debug output
+
+   Add meson option 'enable-debug' which enables runtime debug output when
+   set to true. Default value is false.
+
+ * Update README
+
+ * Add mouse and touch config details to status
+
+ * Make communication more robust
+
+   Make communication more robust by reworking the communication transport
+   mechanism to use a socket instead of messages queues.
+
+   This should solve the issue of the occasianally missing letters when
+   using the keyboard simulator.
 
 
 
