@@ -21,6 +21,8 @@
 
 #include <stdint.h>
 
+#define MSG_SOCKET_FILENAME "/tmp/input-emulator.socket"
+
 typedef struct __attribute__((__packed__))
 {
     uint8_t type;
@@ -33,6 +35,7 @@ typedef enum
     REQ_KBD_KEY,
     REQ_KBD_KEYDOWN,
     REQ_KBD_KEYUP,
+    REQ_KBD_TYPE,
     REQ_MOUSE_START,
     REQ_MOUSE_MOVE,
     REQ_MOUSE_CLICK,
@@ -49,10 +52,12 @@ typedef enum
     RSP_ERROR,
 } message_type_t;
 
-void message_queue_server_open(void);
-void message_queue_server_close(void);
-void message_queue_client_open(void);
-void message_queue_client_close(void);
+void message_server_open(void);
+void message_server_close(void);
+void message_client_open(void);
+void message_client_mode_enable(void);
+void message_client_close(void);
+void message_server_listen(void (*callback)(void));
 int msg_create(void **message, message_type_t type, void *payload, uint32_t payload_length);
 void msg_destroy(void *message);
 int msg_send(void *message);

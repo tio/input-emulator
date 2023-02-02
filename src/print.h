@@ -43,3 +43,5 @@
 #define debug_printf(format, args...)
 #define debug_printf_raw(format, args...)
 #endif
+
+void debug_print_hex_dump(void *data, int length);

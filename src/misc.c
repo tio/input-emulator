@@ -23,6 +23,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <wchar.h>
+#include "print.h"
 
 wchar_t *convert_mbs_to_wcs(const char *string)
 {
@@ -30,6 +31,7 @@ wchar_t *convert_mbs_to_wcs(const char *string)
     size_t mbs_length;
 
     mbs_length = mbstowcs(NULL, string, 0);
+    debug_printf("mbs_length = %ld\n", mbs_length);
     if (mbs_length == (size_t) -1)
     {
         perror("mbstowcs");

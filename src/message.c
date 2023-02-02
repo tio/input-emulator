@@ -18,98 +18,129 @@
  */
 
 #include <stdio.h>
+#include <fcntl.h>
+#include <netdb.h>
+#include <errno.h>
+#include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
-#include <fcntl.h>
+#include <sys/un.h>
+#include <stdbool.h>
 #include <sys/stat.h>
 #include <sys/file.h>
-#include <mqueue.h>
-#include <errno.h>
+#include <netinet/in.h>
+#include <sys/socket.h>
 #include "message.h"
 #include "print.h"
 
-#define QUEUE_NAME_SRV_OUT  "/input-emulator-srv-out"
-#define QUEUE_NAME_SRV_IN   "/input-emulator-srv-in"
-#define MAX_SIZE    1024
+#define MAX_CLIENTS 1
 
-static mqd_t mq_out;
-static mqd_t mq_in;
+static int srv_sockfd;
+static int new_srv_sockfd;
+static int cli_sockfd;
+static int *sockfd = &new_srv_sockfd;
 
-void message_queue_server_open(void)
+void message_client_mode_enable(void)
 {
-    struct mq_attr attr;
-
-    debug_printf("Server opening message queues\n");
-
-    /* Initialize queue attributes */
-    attr.mq_flags = 0;
-    attr.mq_maxmsg = 10;
-    attr.mq_msgsize = MAX_SIZE;
-    attr.mq_curmsgs = 0;
-
-    /* Create outgoing message queue */
-    if ((mq_out = mq_open(QUEUE_NAME_SRV_OUT, O_CREAT | O_WRONLY | O_EXCL, 0644, &attr) ) == -1)
-    {
-        perror("mq_open() failure");
-        exit (EXIT_FAILURE);
-    }
-
-    /* Create incoming message queue */
-    if ((mq_in = mq_open(QUEUE_NAME_SRV_IN, O_CREAT | O_RDONLY | O_EXCL, 0644, &attr) ) == -1)
-    {
-        perror("mq_open() failure");
-        exit (EXIT_FAILURE);
-    }
+    sockfd = &cli_sockfd;
 }
 
-void message_queue_client_open(void)
+void message_server_open(void)
 {
-    int status;
+    debug_printf("Server opening message socket\n");
 
-    debug_printf("Client opening queues\n");
+    struct sockaddr_un srv_addr;
 
-    /* Open incoming message queue */
-    if ((mq_in = mq_open(QUEUE_NAME_SRV_OUT, O_RDONLY) ) == -1)
+    debug_printf("Starting message server..\n");
+
+    /* Create UNIX file socket */
+    srv_sockfd = socket(AF_UNIX, SOCK_STREAM, 0);
+    if (srv_sockfd < 0)
     {
-        perror("mq_open() failure");
-        exit (EXIT_FAILURE);
+        error_printf("Opening socket (%s)\n", strerror(errno));
+        exit(EXIT_FAILURE);
     }
 
-    /* Open outgoing message queue */
-    if ((mq_out = mq_open(QUEUE_NAME_SRV_IN, O_WRONLY) ) == -1)
-    {
-        perror("mq_open() failure");
-        exit (EXIT_FAILURE);
-    }
+    /* Initialize socket structure */
+    bzero((char *) &srv_addr, sizeof(srv_addr));
+    srv_addr.sun_family = AF_UNIX;
+    strcpy(srv_addr.sun_path, MSG_SOCKET_FILENAME);
 
-    /* Put advisory lock on message queue file so we don't open it if already open (busy) */
-    status = flock(mq_in, LOCK_EX | LOCK_NB);
-    if ((status == -1) && (errno == EWOULDBLOCK))
+    /* Bind the host address using bind() call (creates socket file) */
+    if (bind(srv_sockfd, (struct sockaddr *) &srv_addr, sizeof(srv_addr)) < 0)
     {
-        perror("Device file is locked by another process");
+        error_printf("On binding (%s)\n", strerror(errno));
         exit(EXIT_FAILURE);
     }
 }
 
-void message_queue_server_close(void)
+void message_server_listen(void (*callback)(void))
 {
-    debug_printf("Server closing mqueue\n");
+    struct sockaddr_un cli_addr;
+    socklen_t cli_len;
 
-    /* Cleanup */
-    mq_close(mq_out);
-    mq_unlink(QUEUE_NAME_SRV_OUT);
-    mq_close(mq_in);
-    mq_unlink(QUEUE_NAME_SRV_IN);
+    /* Listen and sleep until incoming connection */
+    listen(srv_sockfd, MAX_CLIENTS);
+    cli_len = sizeof(cli_addr);
+
+    while (1)
+    {
+        /* Block until a new connection is available */
+        new_srv_sockfd = accept(srv_sockfd, (struct sockaddr *) &cli_addr, &cli_len);
+        if (new_srv_sockfd < 0)
+        {
+            error_printf("On accept (%s)\n", strerror(errno));
+            exit(EXIT_FAILURE);
+        }
+
+        /* Do callback which will handle incoming request by reading/writing
+         * messages */
+        callback();
+
+        /* Close connection when done handling incoming request */
+        close(new_srv_sockfd);
+    }
 }
 
-void message_queue_client_close(void)
+void message_server_close(void)
 {
-    debug_printf("Client closing mqueue\n");
+    close(srv_sockfd);
+    unlink(MSG_SOCKET_FILENAME);
+}
 
-    /* Cleanup */
-    mq_close(mq_out);
-    flock(mq_in, LOCK_UN);
-    mq_close(mq_in);
+void message_client_open(void)
+{
+    struct sockaddr_un srv_addr;
+
+    debug_printf("Starting socket client\n");
+
+    /* Create a UNIX file socket */
+    cli_sockfd = socket(AF_UNIX, SOCK_STREAM, 0);
+    if (cli_sockfd < 0)
+    {
+        error_printf("Opening socket (%s)\n", strerror(errno));
+        exit(EXIT_FAILURE);
+    }
+
+    /* Initialize socket structure */
+    bzero((char *) &srv_addr, sizeof(srv_addr));
+    srv_addr.sun_family = AF_UNIX;
+    strcpy(srv_addr.sun_path, MSG_SOCKET_FILENAME);
+
+    /* Connect to the server */
+    if (connect(cli_sockfd, (struct sockaddr*)&srv_addr, sizeof(srv_addr)) < 0)
+    {
+        error_printf("Connect failure (%s)\n", strerror(errno));
+        exit(EXIT_FAILURE);
+    }
+
+    message_client_mode_enable();
+}
+
+void message_client_close(void)
+{
+    debug_printf("Closing socket client\n");
+    close(cli_sockfd);
 }
 
 int msg_create(
@@ -151,49 +182,72 @@ void msg_destroy(void *message)
 
 int msg_send(void *message)
 {
-    int status;
+    ssize_t bytes_sent;
+    ssize_t bytes_remaining;
+    char *message_p = message;
 
-    // Send message via mq queue
     message_header_t *header = message;
+    bytes_remaining = sizeof(message_header_t) + header->payload_length;
 
-    status = mq_send(mq_out, message, sizeof(message_header_t) + header->payload_length, 0);
-    if (status == -1)
+    while (bytes_remaining)
     {
-        perror("msg_send() failed");
+        bytes_sent = write(*sockfd, message_p, bytes_remaining);
+        if (bytes_sent < 0)
+        {
+            warning_printf("Writing to socket (%s)\n", strerror(errno));
+            return -errno;
+        }
+
+        bytes_remaining -= bytes_sent;
+        message_p += bytes_sent;
     }
 
-    return status;
+    return 0;
 }
 
 int msg_receive(void **message)
 {
-    char buffer[MAX_SIZE + 1];
+    message_header_t header;
     ssize_t bytes_read;
-    message_header_t *header = (message_header_t *)buffer;
+    ssize_t bytes_remaining;
+    char *message_p;
 
-    /* Receive message */
-    bytes_read = mq_receive(mq_in, buffer, MAX_SIZE, NULL);
+    /* Read message header */
+    bytes_read = read(*sockfd, &header, sizeof(header));
     if (bytes_read < 0)
     {
-        perror("mq_receive failure");
+        error_printf("Reading from (%s)\n", strerror(errno));
         exit(EXIT_FAILURE);
     }
 
-    // Allocate message (header + payload) receive buffer
-    *message = malloc(sizeof(message_header_t) + header->payload_length);
+    /* Allocate message (header + payload) receive buffer */
+    *message = malloc(sizeof(message_header_t) + header.payload_length);
     if (*message == NULL)
     {
-        perror("malloc() failed\n");
-        return -1;
+        error_printf("malloc() failed (%s)\n", strerror(errno));
+        exit(EXIT_FAILURE);
     }
 
-    // Install header
-    memcpy(*message, header, sizeof(message_header_t));
+    /* Install header */
+    memcpy(*message, &header, sizeof(message_header_t));
 
-    // Install payload
-    char *payload_p = *message + sizeof(message_header_t);
-    char *payload_buffer_p = &buffer[sizeof(message_header_t)];
-    memcpy(payload_p, payload_buffer_p, header->payload_length);
+    /* Read message payload */
+    bytes_remaining = header.payload_length;
+    message_p = *message;
+    message_p += sizeof(message_header_t);
+
+    while (bytes_remaining)
+    {
+        bytes_read = read(*sockfd, message_p, bytes_remaining);
+        if (bytes_read < 0)
+        {
+            warning_printf("Writing to socket (%s)\n", strerror(errno));
+            return -errno;
+        }
+
+        bytes_remaining -= bytes_read;
+        message_p += bytes_read;
+    }
 
     return 0;
 }

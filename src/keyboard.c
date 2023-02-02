@@ -37,6 +37,8 @@
 #include "config.h"
 #include "misc.h"
 
+#define KBD_KEY_DELAY 15*1000 // us
+
 #define SHIFT  (1 << 14)
 #define ALT_GR (1 << 13)
 
@@ -563,7 +565,7 @@ void do_keyboard_key(void *message)
     }
 
     keyboard_press(*key);
-    usleep(14*1000);
+    usleep(KBD_KEY_DELAY);
     keyboard_release(*key);
 
     msg_send_rsp_ok();
@@ -580,32 +582,58 @@ void do_keyboard_key_request(uint32_t key)
     msg_receive_rsp_ok();
 }
 
-void do_keyboard_key_requests(const wchar_t *wc_string)
+void do_keyboard_type(void *message)
 {
-    uint32_t key;
+    const wchar_t *wc_string = message + sizeof(message_header_t);
+    size_t length = wcslen(wc_string) + 1;
     uint32_t modifier;
-    size_t length = wcslen(wc_string);
+    uint32_t key;
+
+    // Dump data received
+    message_header_t *header = message;
+    debug_printf("Dumping received payload:\n");
+    debug_print_hex_dump((void *)wc_string, header->payload_length);
 
     /* Translate each wide character in wc string to uinput key stroke with any
      * modifiers (ALT_LEFTSHIFT, ALT_GR, etc) required */
 
     for (size_t i = 0; i<(length); i++)
     {
-        debug_printf("wchar: %d\n", wc_string[i]);
+        debug_printf("wchar: 0x%x\n", wc_string[i]);
         if (wchar_to_key(wc_string[i], &key, &modifier) == 0)
         {
             debug_printf("wchar: %d, key: %d, modifier: %d\n", wc_string[i], key, modifier);
             if (modifier)
             {
-                do_keyboard_keydown_request(modifier);
+                keyboard_press(modifier);
             }
 
-            do_keyboard_key_request(key);
+            keyboard_press(key);
+            usleep(KBD_KEY_DELAY);
+            keyboard_release(key);
 
             if (modifier)
             {
-                do_keyboard_keyup_request(modifier);
+                keyboard_release(modifier);
             }
         }
     }
+
+    msg_send_rsp_ok();
+}
+
+void do_keyboard_type_request(const wchar_t *wc_string)
+{
+    void *message = NULL;
+    uint32_t wc_string_byte_length = sizeof(wchar_t) * (wcslen(wc_string) + 1);
+
+    // Dump data sent
+    debug_printf("Dumping send payload:\n");
+    debug_print_hex_dump((void *)wc_string, wc_string_byte_length);
+
+    msg_create(&message, REQ_KBD_TYPE, (void *) wc_string, wc_string_byte_length);
+    msg_send(message);
+    msg_destroy(message);
+
+    msg_receive_rsp_ok();
 }

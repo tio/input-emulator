@@ -21,7 +21,7 @@
 #include <stdbool.h>
 #include <sys/stat.h>
 
-bool file_exists(const char *filename)
+bool file_socket_exists(const char *filename)
 {
    struct stat st;
 
@@ -29,7 +29,7 @@ bool file_exists(const char *filename)
    {
       return false;
    }
-   else if (!S_ISREG(st.st_mode))
+   else if (!S_ISSOCK(st.st_mode))
    {
       return false;
    }

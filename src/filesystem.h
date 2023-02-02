@@ -32,4 +32,4 @@
     } \
 }
 
-bool file_exists(const char *filename);
+bool file_socket_exists(const char *filename);

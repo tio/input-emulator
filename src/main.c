@@ -38,95 +38,96 @@
 #include "event.h"
 #include "print.h"
 
-void listen_for_messages(void)
+void handle_message(void)
 {
     void *message = NULL;
     message_header_t *header;
-    bool stop = false;
 
-    do
+    /* Receive message (blocking) */
+    msg_receive(&message);
+    header = message;
+
+    /* Handle incoming message request */
+    switch (header->type)
     {
-        /* Receive next message (blocking) */
-        msg_receive(&message);
-        header = message;
+        case REQ_KBD_START:
+            do_keyboard_start(message);
+            break;
 
-        /* Handle incoming message request */
-        switch (header->type)
-        {
-            case REQ_KBD_START:
-                do_keyboard_start(message);
-                break;
+        case REQ_KBD_KEY:
+            do_keyboard_key(message);
+            break;
 
-            case REQ_KBD_KEY:
-                do_keyboard_key(message);
-                break;
+        case REQ_KBD_KEYDOWN:
+            do_keyboard_keydown(message);
+            break;
 
-            case REQ_KBD_KEYDOWN:
-                do_keyboard_keydown(message);
-                break;
+        case REQ_KBD_KEYUP:
+            do_keyboard_keyup(message);
+            break;
 
-            case REQ_KBD_KEYUP:
-                do_keyboard_keyup(message);
-                break;
+        case REQ_KBD_TYPE:
+            do_keyboard_type(message);
+            break;
 
-            case REQ_MOUSE_START:
-                do_mouse_start(message);
-                break;
+        case REQ_MOUSE_START:
+            do_mouse_start(message);
+            break;
 
-            case REQ_MOUSE_MOVE:
-                do_mouse_move(message);
-                break;
+        case REQ_MOUSE_MOVE:
+            do_mouse_move(message);
+            break;
 
-            case REQ_MOUSE_CLICK:
-                do_mouse_click(message);
-                break;
+        case REQ_MOUSE_CLICK:
+            do_mouse_click(message);
+            break;
 
-            case REQ_MOUSE_DOWN:
-                do_mouse_down(message);
-                break;
+        case REQ_MOUSE_DOWN:
+            do_mouse_down(message);
+            break;
 
-            case REQ_MOUSE_UP:
-                do_mouse_up(message);
-                break;
+        case REQ_MOUSE_UP:
+            do_mouse_up(message);
+            break;
 
-            case REQ_MOUSE_SCROLL:
-                do_mouse_scroll(message);
-                break;
+        case REQ_MOUSE_SCROLL:
+            do_mouse_scroll(message);
+            break;
 
-            case REQ_TOUCH_START:
-                do_touch_start(message);
-                break;
+        case REQ_TOUCH_START:
+            do_touch_start(message);
+            break;
 
-            case REQ_TOUCH_TAP:
-                do_touch_tap(message);
-                break;
+        case REQ_TOUCH_TAP:
+            do_touch_tap(message);
+            break;
 
-            case REQ_STATUS:
-                do_service_status(message);
-                break;
+        case REQ_STATUS:
+            debug_printf("Received status message!\n");
+            do_service_status(message);
+            break;
 
-            case REQ_STOP:
-                do_service_stop(message);
-                if (!devices_online())
-                {
-                    /* No simulated input devices online - stop service */
-                    printf("No simulated input devices online - stopping input-emulator service!\n");
-                    stop = true;
-                }
-                break;
+        case REQ_STOP:
+            do_service_stop(message);
+            if (!devices_online())
+            {
+                /* No simulated input devices online - stop service */
+                printf("No simulated input devices online - stopping input-emulator service!\n");
+                exit(EXIT_SUCCESS);
+            }
+            break;
 
-            default:
-                break;
-        }
-
-        /* Destroy message */
-        msg_destroy(message);
+        default:
+            break;
     }
-    while (!stop);
+
+    /* Destroy message */
+    msg_destroy(message);
 }
 
 int main(int argc, char *argv[])
 {
+    /* Set default locale */
     setlocale(LC_ALL, "");
 
     /* Parse options */
@@ -143,8 +144,8 @@ int main(int argc, char *argv[])
         }
 
         /* Open message queue (client) */
-        message_queue_client_open();
-        atexit(message_queue_client_close);
+        message_client_open();
+        atexit(message_client_close);
     }
 
     /* Handle command */
@@ -157,8 +158,8 @@ int main(int argc, char *argv[])
                 /* Server already running so we will act as client */
 
                 /* Open message queue (client) */
-                message_queue_client_open();
-                atexit(message_queue_client_close);
+                message_client_open();
+                atexit(message_client_close);
 
                 switch (option.device)
                 {
@@ -226,11 +227,11 @@ int main(int argc, char *argv[])
             }
 
             /* Set up message queue */
-            message_queue_server_open();
-            atexit(message_queue_server_close);
+            message_server_open();
+            atexit(message_server_close);
 
             /* Enter command handling loop */
-            listen_for_messages();
+            message_server_listen(handle_message);
 
             break;
 
@@ -251,9 +252,7 @@ int main(int argc, char *argv[])
                     break;
 
                 case KBD_TYPE:
-                    /* No single type request here as we translate input string
-                     * into a sequence of key requests */
-                    do_keyboard_key_requests(option.wc_string);
+                    do_keyboard_type_request(option.wc_string);
                     break;
 
                 case KBD_NONE:

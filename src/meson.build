@@ -5,16 +5,17 @@ configure_file(output: 'config.h', configuration: config_h)
 
 input_emulator_sources = [
   'main.c',
+  'misc.c',
   'touch.c',
-  'keyboard.c',
   'mouse.c',
+  'event.c',
+  'print.c',
   'service.c',
   'message.c',
   'options.c',
   'signals.c',
+  'keyboard.c',
   'filesystem.c',
-  'event.c',
-  'misc.c',
 ]
 
 input_emulator_c_args = ['-Wno-unused-result']
