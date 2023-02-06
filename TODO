@@ -1,5 +1,3 @@
  * Support various keyboard layouts (right now only DK layout is supported)
 
- * Add support for moving mouse input device with non-relative movements (if possible)
-
  * Add support for more touch actions (doubletap, fingerdown/fingerup <index>, moveto <x> <y>)
