@@ -18,8 +18,8 @@ evemu-event, etc.) which make scripted automation not as easy.
 To make a simple input emulator for test automation.
 
 input-emulator was originally named keyboard-simulator and started as part of
-the tio project to script keyboard input to automate generation of tio
-demonstration gifs.
+the [tio](https://github.com/tio/tio) project to script keyboard input to
+automate generation of tio demonstration gifs.
 
 ## 2. features
 
