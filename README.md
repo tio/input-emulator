@@ -50,29 +50,29 @@ Usage: input-emulator [--version] [--help] <command> [<arguments>]
 
 Available commands:
   start [<options>] kbd|mouse|touch  Create virtual input device
-  kbd <action> [args]                Do keyboard action
-  mouse <action> [args]              Do mouse action
-  touch <action> [args]              Do touch action
+  kbd <action> <args>                Do keyboard action
+  mouse <action> <args>              Do mouse action
+  touch <action> <args>              Do touch action
   status                             Show status of virtual input devices
   stop kbd|mouse|touch|all           Destroy virtual input device
 
 Start options:
-  -x, --x-max <int>                  Maximum x-coordinate (only for mouse and touch)
-  -y, --y-max <int>                  Maximum y-coordinate (only for mouse and touch)
-  -s, --slots <int>                  Maximum number of slots (fingers) recognized (only for touch)
+  -x, --x-max <points>               Maximum x-coordinate (only for mouse and touch)
+  -y, --y-max <points>               Maximum y-coordinate (only for mouse and touch)
+  -s, --slots <number>               Maximum number of slots (fingers) recognized (only for touch)
   -n, --no-daemonize                 Run in foreground
 
 Keyboard actions:
-  type '<string>'                    Type string
-  key <key>                          Stroke key
-  keydown <key>                      Press and hold key
+  type <string>                      Type string
+  key <key>                          Stroke key (press and release)
+  keydown <key>                      Press key
   keyup <key>                        Release key
 
 Mouse actions:
   move <x> <y>                       Move mouse x,y relative
-  click left|middle|right            Click mouse button
-  down left|middle|right             Push mouse button down
-  up left|middle|right               Release mouse button
+  button left|middle|right           Click mouse button (press and release)
+  buttondown left|middle|right       Press mouse button
+  buttonup left|middle|right         Release mouse button
   scroll <ticks>                     Scroll mouse wheel number of ticks
 
 Touch actions:
@@ -91,9 +91,9 @@ Touch actions:
 ```
  $ input-emulator start mouse --x-max 2560 --y-max 1440
  $ input-emulator mouse move 200 -300
- $ input-emulator mouse click left
- $ input-emulator mouse down right
- $ input-emulator mouse up right
+ $ input-emulator mouse button left
+ $ input-emulator mouse buttondown right
+ $ input-emulator mouse buttonup right
  $ input-emulator mouse scroll -1
  $ input-emulator stop
 ```

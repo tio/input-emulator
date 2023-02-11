@@ -265,7 +265,7 @@ void do_mouse_click_request(int button)
 {
     void *message = NULL;
 
-    msg_create(&message, REQ_MOUSE_CLICK, &button, sizeof(button));
+    msg_create(&message, REQ_MOUSE_BUTTON, &button, sizeof(button));
     msg_send(message);
     msg_destroy(message);
 
@@ -319,7 +319,7 @@ void do_mouse_down_request(int button)
 {
     void *message = NULL;
 
-    msg_create(&message, REQ_MOUSE_DOWN, &button, sizeof(button));
+    msg_create(&message, REQ_MOUSE_BUTTONDOWN, &button, sizeof(button));
     msg_send(message);
     msg_destroy(message);
 
@@ -346,7 +346,7 @@ void do_mouse_up_request(int button)
 {
     void *message = NULL;
 
-    msg_create(&message, REQ_MOUSE_UP, &button, sizeof(button));
+    msg_create(&message, REQ_MOUSE_BUTTONUP, &button, sizeof(button));
     msg_send(message);
     msg_destroy(message);
 

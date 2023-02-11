@@ -63,29 +63,29 @@ void options_help_print(void)
     printf("\n");
     printf("Available commands:\n");
     printf("  start [<options>] kbd|mouse|touch  Create virtual input device\n");
-    printf("  kbd <action> [args]                Do keyboard action\n");
-    printf("  mouse <action> [args]              Do mouse action\n");
-    printf("  touch <action> [args]              Do touch action\n");
+    printf("  kbd <action> <args>                Do keyboard action\n");
+    printf("  mouse <action> <args>              Do mouse action\n");
+    printf("  touch <action> <args>              Do touch action\n");
     printf("  status                             Show status of virtual input devices\n");
     printf("  stop kbd|mouse|touch|all           Destroy virtual input device\n");
     printf("\n");
     printf("Start options:\n");
-    printf("  -x, --x-max <int>                  Maximum x-coordinate (only for mouse and touch)\n");
-    printf("  -y, --y-max <int>                  Maximum y-coordinate (only for mouse and touch)\n");
-    printf("  -s, --slots <int>                  Maximum number of slots (fingers) recognized (only for touch)\n");
+    printf("  -x, --x-max <points>               Maximum x-coordinate (only for mouse and touch)\n");
+    printf("  -y, --y-max <points>               Maximum y-coordinate (only for mouse and touch)\n");
+    printf("  -s, --slots <number>               Maximum number of slots (fingers) recognized (only for touch)\n");
     printf("  -n, --no-daemonize                 Run in foreground\n");
     printf("\n");
     printf("Keyboard actions:\n");
-    printf("  type '<string>'                    Type string\n");
-    printf("  key <key>                          Stroke key\n");
-    printf("  keydown <key>                      Press and hold key\n");
+    printf("  type <string>                      Type string\n");
+    printf("  key <key>                          Stroke key (press and release)\n");
+    printf("  keydown <key>                      Press key\n");
     printf("  keyup <key>                        Release key\n");
     printf("\n");
     printf("Mouse actions:\n");
     printf("  move <x> <y>                       Move mouse x,y relative\n");
-    printf("  click left|middle|right            Click mouse button\n");
-    printf("  down left|middle|right             Push mouse button down\n");
-    printf("  up left|middle|right               Release mouse button\n");
+    printf("  button left|middle|right           Click mouse button (press and release)\n");
+    printf("  buttondown left|middle|right       Press mouse button\n");
+    printf("  buttonup left|middle|right         Release mouse button\n");
     printf("  scroll <ticks>                     Scroll mouse wheel number of ticks\n");
     printf("\n");
     printf("Touch actions:\n");
@@ -395,9 +395,9 @@ void options_parse(int argc, char *argv[])
                     }
                 }
             }
-            else if (strcmp(argv[optind], "click") == 0)
+            else if (strcmp(argv[optind], "button") == 0)
             {
-                option.mouse_action = MOUSE_CLICK;
+                option.mouse_action = MOUSE_BUTTON;
                 optind++;
                 if (optind != argc)
                 {
@@ -418,7 +418,7 @@ void options_parse(int argc, char *argv[])
             }
             else if (strcmp(argv[optind], "down") == 0)
             {
-                option.mouse_action = MOUSE_DOWN;
+                option.mouse_action = MOUSE_BUTTONDOWN;
                 optind++;
                 if (optind != argc)
                 {
@@ -439,7 +439,7 @@ void options_parse(int argc, char *argv[])
             }
             else if (strcmp(argv[optind], "up") == 0)
             {
-                option.mouse_action = MOUSE_UP;
+                option.mouse_action = MOUSE_BUTTONUP;
                 optind++;
                 if (optind != argc)
                 {
@@ -470,11 +470,11 @@ void options_parse(int argc, char *argv[])
             }
         }
 
-        if (option.mouse_action == MOUSE_CLICK)
+        if (option.mouse_action == MOUSE_BUTTON)
         {
             if (option.button == -1)
             {
-                error_printf("Please specify click <button>\n");
+                error_printf("Please specify button left|middle|right\n");
                 exit(EXIT_FAILURE);
             }
         }

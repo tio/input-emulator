@@ -78,15 +78,15 @@ void handle_message(void)
             do_mouse_move(message);
             break;
 
-        case REQ_MOUSE_CLICK:
+        case REQ_MOUSE_BUTTON:
             do_mouse_click(message);
             break;
 
-        case REQ_MOUSE_DOWN:
+        case REQ_MOUSE_BUTTONDOWN:
             do_mouse_down(message);
             break;
 
-        case REQ_MOUSE_UP:
+        case REQ_MOUSE_BUTTONUP:
             do_mouse_up(message);
             break;
 
@@ -268,15 +268,15 @@ int main(int argc, char *argv[])
                     do_mouse_move_request(option.x, option.y);
                     break;
 
-                case MOUSE_CLICK:
+                case MOUSE_BUTTON:
                     do_mouse_click_request(option.button);
                     break;
 
-                case MOUSE_DOWN:
+                case MOUSE_BUTTONDOWN:
                     do_mouse_down_request(option.button);
                     break;
 
-                case MOUSE_UP:
+                case MOUSE_BUTTONUP:
                     do_mouse_up_request(option.button);
                     break;
 

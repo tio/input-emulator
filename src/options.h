@@ -56,9 +56,9 @@ typedef enum
 typedef enum
 {
     MOUSE_MOVE,
-    MOUSE_CLICK,
-    MOUSE_DOWN,
-    MOUSE_UP,
+    MOUSE_BUTTON,
+    MOUSE_BUTTONDOWN,
+    MOUSE_BUTTONUP,
     MOUSE_SCROLL,
     MOUSE_NONE,
 } mouse_action_t;
