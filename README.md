@@ -2,6 +2,7 @@
 
 [![](https://img.shields.io/github/v/release/tio/input-emulator?sort=semver)](https://github.com/tio/input-emulator/releases)
 [![](https://img.shields.io/tokei/lines/github/tio/input-emulator)](https://github.com/tio/input-emulator)
+[![](https://img.shields.io/codefactor/grade/github/tio/input-emulator)](https://www.codefactor.io/repository/github/tio/input-emulator)
 
 ## 1. Introduction
 
