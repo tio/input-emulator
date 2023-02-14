@@ -416,7 +416,7 @@ void options_parse(int argc, char *argv[])
                     optind++;
                 }
             }
-            else if (strcmp(argv[optind], "down") == 0)
+            else if (strcmp(argv[optind], "buttondown") == 0)
             {
                 option.mouse_action = MOUSE_BUTTONDOWN;
                 optind++;
@@ -437,7 +437,7 @@ void options_parse(int argc, char *argv[])
                     optind++;
                 }
             }
-            else if (strcmp(argv[optind], "up") == 0)
+            else if (strcmp(argv[optind], "buttonup") == 0)
             {
                 option.mouse_action = MOUSE_BUTTONUP;
                 optind++;
