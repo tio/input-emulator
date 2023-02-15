@@ -1,5 +1,21 @@
 
-=== input-emulator v0.6 ===
+=== input-emulator v0.7 ===
+
+
+
+Changes since v0.6:
+
+ * Rename mouse actions
+
+   Rename 'mouse click' to 'mouse button'
+   Rename 'mouse down' to 'mouse buttondown'
+   Rename 'mouse up' to 'mouse buttonup'
+
+   README and code updated accordingly.
+
+   The new mouse action naming follows the keyboard action naming for
+   better consistency.
+
 
 
 Changes since v0.5:
