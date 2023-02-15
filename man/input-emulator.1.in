@@ -128,7 +128,7 @@ The same key aliases mentioned above are recognized.
 
 .SH "MOUSE ACTIONS"
 
-.TP
+.TP 12n
 .BR move
 .B <x>
 .B <y>
@@ -136,22 +136,22 @@ The same key aliases mentioned above are recognized.
 Move mouse by x,y points (relative movement).
 
 .TP
-.BR click
-.B <button>
+.BR button
+.B left|middle|right
 
-Click mouse button (left, right, middle).
-
-.TP
-.BR down
-.B <button>
-
-Press and keep mouse button (left, right, middle) down.
+Press and release mouse button (left, middle, right).
 
 .TP
-.BR up
-.B <button>
+.BR buttondown
+.B left|middle|right
 
-Release mouse button (left, right, middle).
+Press and keep mouse button (left, middle, right) down.
+
+.TP
+.BR buttonup
+.B left|middle|right
+
+Release mouse button (left, middle, right).
 
 .TP
 .BR scroll
