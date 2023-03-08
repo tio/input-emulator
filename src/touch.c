@@ -28,7 +28,6 @@
 #include <errno.h>
 #include "touch.h"
 #include "event.h"
-#include "filesystem.h"
 #include "options.h"
 #include "message.h"
 #include "service.h"

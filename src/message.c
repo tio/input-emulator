@@ -34,11 +34,54 @@
 #include "print.h"
 
 #define MAX_CLIENTS 1
+#define MSG_SOCKET_NAME "input-emulator.socket"
 
 static int srv_sockfd;
 static int new_srv_sockfd;
 static int cli_sockfd;
 static int *sockfd = &new_srv_sockfd;
+
+bool message_server_running(void)
+{
+    int r;
+    struct sockaddr_un serv_addr;
+    int sockfd;
+    bool in_use_status = false;
+
+    /* Create socket */
+    sockfd = socket(AF_UNIX, SOCK_STREAM, 0);
+    if (sockfd < 0)
+    {
+        error_printf("Opening socket\n");
+        exit(EXIT_FAILURE);
+    }
+
+    /* Initialize socket structure */
+    bzero((char *) &serv_addr, sizeof(serv_addr));
+    serv_addr.sun_family = AF_UNIX;
+    strcpy(serv_addr.sun_path + 1, MSG_SOCKET_NAME); // Abstract socket
+
+    /* Bind the host address using bind() call.*/
+    r = bind(sockfd, (struct sockaddr *) &serv_addr, sizeof(serv_addr));
+    if (r < 0)
+    {
+        if (errno == EADDRINUSE)
+        {
+            in_use_status = true;
+        }
+        else
+        {
+            error_printf("On binding (%s)\n", strerror(errno));
+            exit(EXIT_FAILURE);
+        }
+    }
+    else
+    {
+        close(sockfd);
+    }
+
+    return in_use_status;
+}
 
 void message_client_mode_enable(void)
 {
@@ -64,7 +107,7 @@ void message_server_open(void)
     /* Initialize socket structure */
     bzero((char *) &srv_addr, sizeof(srv_addr));
     srv_addr.sun_family = AF_UNIX;
-    strcpy(srv_addr.sun_path, MSG_SOCKET_FILENAME);
+    strcpy(srv_addr.sun_path + 1, MSG_SOCKET_NAME); // Use abstract socket
 
     /* Bind the host address using bind() call (creates socket file) */
     if (bind(srv_sockfd, (struct sockaddr *) &srv_addr, sizeof(srv_addr)) < 0)
@@ -105,7 +148,6 @@ void message_server_listen(void (*callback)(void))
 void message_server_close(void)
 {
     close(srv_sockfd);
-    unlink(MSG_SOCKET_FILENAME);
 }
 
 void message_client_open(void)
@@ -125,7 +167,7 @@ void message_client_open(void)
     /* Initialize socket structure */
     bzero((char *) &srv_addr, sizeof(srv_addr));
     srv_addr.sun_family = AF_UNIX;
-    strcpy(srv_addr.sun_path, MSG_SOCKET_FILENAME);
+    strcpy(srv_addr.sun_path + 1, MSG_SOCKET_NAME); // Use abstract socket
 
     /* Connect to the server */
     if (connect(cli_sockfd, (struct sockaddr*)&srv_addr, sizeof(srv_addr)) < 0)

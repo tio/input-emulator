@@ -23,7 +23,6 @@
 #include <unistd.h>
 #include <string.h>
 #include <sys/stat.h>
-#include "filesystem.h"
 #include "message.h"
 #include "options.h"
 #include "keyboard.h"
@@ -46,7 +45,7 @@ bool devices_online(void)
 
 bool service_running(void)
 {
-   return file_socket_exists(MSG_SOCKET_FILENAME);
+   return message_server_running();
 }
 
 void daemonize(void)

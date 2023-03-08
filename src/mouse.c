@@ -25,7 +25,6 @@
 #include <fcntl.h>
 #include <linux/uinput.h>
 #include <errno.h>
-#include "filesystem.h"
 #include "options.h"
 #include "message.h"
 #include "event.h"

@@ -20,8 +20,7 @@
 #pragma once
 
 #include <stdint.h>
-
-#define MSG_SOCKET_FILENAME "/tmp/input-emulator.socket"
+#include <stdbool.h>
 
 typedef struct __attribute__((__packed__))
 {
@@ -64,3 +63,4 @@ int msg_send(void *message);
 int msg_receive(void **message);
 void msg_send_rsp_ok(void);
 void msg_receive_rsp_ok(void);
+bool message_server_running(void);

@@ -25,4 +25,14 @@
 
 #define SYS_NAME_LENGTH_MAX 50
 
+#define do_ioctl(fd, request, args...) \
+{ \
+    int status = ioctl(fd, request, ## args); \
+    if (status < 0) \
+    { \
+        fprintf(stderr, "ioctl error: %s\n", strerror(errno)); \
+        exit(EXIT_FAILURE); \
+    } \
+}
+
 wchar_t *convert_mbs_to_wcs(const char *string);

@@ -14,8 +14,7 @@ input_emulator_sources = [
   'message.c',
   'options.c',
   'signals.c',
-  'keyboard.c',
-  'filesystem.c',
+  'keyboard.c'
 ]
 
 input_emulator_c_args = ['-Wno-unused-result']

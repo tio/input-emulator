@@ -31,7 +31,6 @@
 #include "service.h"
 #include "message.h"
 #include "options.h"
-#include "filesystem.h"
 #include "keyboard.h"
 #include "touch.h"
 #include "mouse.h"

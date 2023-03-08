@@ -31,5 +31,3 @@
         exit(EXIT_FAILURE); \
     } \
 }
-
-bool file_socket_exists(const char *filename);
