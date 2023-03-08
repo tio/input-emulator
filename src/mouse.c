@@ -129,7 +129,7 @@ int mouse_create(int x_max, int y_max)
     static struct uinput_abs_setup abs_setup;
 
     mouse_config_x_max = x_max;
-    mouse_config_x_max = x_max;
+    mouse_config_y_max = y_max;
 
     if (mouse_fd >= 0)
     {
