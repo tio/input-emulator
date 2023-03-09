@@ -4,7 +4,8 @@
 
 ie=input-emulator
 
-${ie} start kbd
+${ie} start --type-delay 0 kbd
+${ie} status
 
 for (( c=1; c<=1000; c++ ))
 do

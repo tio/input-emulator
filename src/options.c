@@ -42,7 +42,7 @@ option_t option =
     .kbd_action = KBD_NONE,
     .string = NULL,
     .key = 0,
-    .type_delay = 40,
+    .type_delay = 15,
     .mouse_action = MOUSE_NONE,
     .ticks = 0,
     .button = -1,
@@ -73,6 +73,7 @@ void options_help_print(void)
     printf("  -x, --x-max <points>               Maximum x-coordinate (only for mouse and touch)\n");
     printf("  -y, --y-max <points>               Maximum y-coordinate (only for mouse and touch)\n");
     printf("  -s, --slots <number>               Maximum number of slots (fingers) recognized (only for touch)\n");
+    printf("  -d, --type-delay <ms>              Type delay (only for keyboard, default: %d)\n", option.type_delay);
     printf("  -n, --no-daemonize                 Run in foreground\n");
     printf("\n");
     printf("Keyboard actions:\n");
@@ -124,6 +125,7 @@ void options_parse(int argc, char *argv[])
             {"x-max",          required_argument, 0, 'x'},
             {"y-max",          required_argument, 0, 'y'},
             {"slots",          required_argument, 0, 's'},
+            {"type-delay",     required_argument, 0, 'd'},
             {"no-daemonize",   no_argument,       0, 'n'},
             {0,                0,                 0,  0 }
         };
@@ -131,7 +133,7 @@ void options_parse(int argc, char *argv[])
         do
         {
             /* Parse start options */
-            c = getopt_long(argc, argv, "x:y:s:n", long_options, &option_index);
+            c = getopt_long(argc, argv, "x:y:s:d:n", long_options, &option_index);
 
             switch (c)
             {
@@ -145,6 +147,10 @@ void options_parse(int argc, char *argv[])
 
                 case 's':
                     option.slots = atoi(optarg);
+                    break;
+
+                case 'd':
+                    option.type_delay = atoi(optarg);
                     break;
 
                 case 'n':

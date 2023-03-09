@@ -169,7 +169,10 @@ void do_service_status(void *message)
 
     if (keyboard_online())
     {
-        sprintf(rsp_text_p, "  kbd: %s/%s\n", sys_path, keyboard_sys_name());
+        sprintf(rsp_text_p, "  kbd: %s/%s (type-delay: %u)\n",
+                sys_path,
+                keyboard_sys_name(),
+                keyboard_type_delay());
         rsp_text_p += strlen(rsp_text_p);
     }
 

@@ -34,15 +34,15 @@
 #include "message.h"
 #include "print.h"
 #include "config.h"
+#include "keyboard.h"
 #include "misc.h"
-
-#define KBD_KEY_DELAY 15*1000 // us
 
 #define SHIFT  (1 << 14)
 #define ALT_GR (1 << 13)
 
 static int keyboard_fd = -1;
 static char sys_name[SYS_NAME_LENGTH_MAX];
+static uint32_t kbd_type_delay;
 
 /* Map list of supportd wchar values (incomplete) */
 static struct wchar_to_key_map_t
@@ -387,7 +387,7 @@ void wchar_or_alias_to_key(wchar_t *wcs, uint32_t *key)
     }
 }
 
-int keyboard_create(void)
+int keyboard_create(uint32_t type_delay)
 {
     struct uinput_setup usetup;
 
@@ -396,6 +396,8 @@ int keyboard_create(void)
         /* Keyboard already started */
         return -1;
     }
+
+    kbd_type_delay = type_delay;
 
     keyboard_fd = open("/dev/uinput", O_WRONLY | O_NONBLOCK);
     if (keyboard_fd < 0)
@@ -479,19 +481,37 @@ const char* keyboard_sys_name(void)
     return sys_name;
 }
 
+uint32_t keyboard_type_delay(void)
+{
+    return kbd_type_delay;
+}
+
 void do_keyboard_start(void *message)
 {
-    UNUSED(message);
-    keyboard_create();
+    message_header_t *header = message;
+    keyboard_start_data_t *data = message + sizeof(message_header_t);
+
+    if (header->payload_length != sizeof(keyboard_start_data_t))
+    {
+        warning_printf("Warning: Invalid payload length\n");
+        return;
+    }
+
+    keyboard_create(data->type_delay);
 
     msg_send_rsp_ok();
 }
 
-void do_keyboard_start_request(void)
+void do_keyboard_start_request(uint32_t type_delay)
 {
     void *message = NULL;
+    keyboard_start_data_t data;
 
-    msg_create(&message, REQ_KBD_START, NULL, 0);
+    debug_printf("Sending keyboard start message!\n");
+
+    data.type_delay = type_delay;
+
+    msg_create(&message, REQ_KBD_START, &data, sizeof(data));
     msg_send(message);
     msg_destroy(message);
 
@@ -564,7 +584,7 @@ void do_keyboard_key(void *message)
     }
 
     keyboard_press(*key);
-    usleep(KBD_KEY_DELAY);
+    usleep(kbd_type_delay*1000);
     keyboard_release(*key);
 
     msg_send_rsp_ok();
@@ -608,7 +628,7 @@ void do_keyboard_type(void *message)
             }
 
             keyboard_press(key);
-            usleep(KBD_KEY_DELAY);
+            usleep(kbd_type_delay*1000);
             keyboard_release(key);
 
             if (modifier)

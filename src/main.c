@@ -163,7 +163,7 @@ int main(int argc, char *argv[])
                 switch (option.device)
                 {
                     case DEV_KEYBOARD:
-                        do_keyboard_start_request();
+                        do_keyboard_start_request(option.type_delay);
                         break;
 
                     case DEV_MOUSE:
@@ -198,7 +198,7 @@ int main(int argc, char *argv[])
             {
                 case DEV_KEYBOARD:
                     /* Initilize keyboard input event device */
-                    if (keyboard_create() == 0)
+                    if (keyboard_create(option.type_delay) == 0)
                     {
                         atexit(keyboard_destroy);
                     }

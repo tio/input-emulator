@@ -23,10 +23,16 @@
 #include <stdbool.h>
 #include <wchar.h>
 
-int keyboard_create(void);
+typedef struct
+{
+    uint32_t type_delay;
+} keyboard_start_data_t;
+
+int keyboard_create(uint32_t type_delay);
 void keyboard_destroy(void);
 bool keyboard_online(void);
 const char* keyboard_sys_name(void);
+uint32_t keyboard_type_delay(void);
 void do_keyboard_keydown(void *message);
 void do_keyboard_keydown_request(uint32_t key);
 void do_keyboard_keyup(void *message);
@@ -36,6 +42,6 @@ void do_keyboard_key_request(uint32_t key);
 void do_keyboard_type(void *message);
 void do_keyboard_type_request(const wchar_t *wc_string);
 void do_keyboard_start(void *message);
-void do_keyboard_start_request(void);
+void do_keyboard_start_request(uint32_t type_delay);
 int wchar_to_key(wchar_t wc, uint32_t *key, uint32_t *modifier);
 void wchar_or_alias_to_key(wchar_t *wcs, uint32_t *key);
