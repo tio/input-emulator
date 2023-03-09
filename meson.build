@@ -6,7 +6,7 @@ project('input-emulator', 'c',
 )
 
 # The tag date of the project_version(), update when the version bumps.
-version_date = '2023-2-15'
+version_date = '2023-03-09'
 
 subdir('src')
 subdir('man')
