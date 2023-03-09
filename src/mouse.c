@@ -156,6 +156,7 @@ int mouse_create(int x_max, int y_max)
     do_ioctl(mouse_fd, UI_SET_EVBIT, EV_REL);
     do_ioctl(mouse_fd, UI_SET_RELBIT, REL_X);
     do_ioctl(mouse_fd, UI_SET_RELBIT, REL_Y);
+    do_ioctl(mouse_fd, UI_SET_RELBIT, REL_WHEEL);
 
     /* Enable absolute movement events */
     do_ioctl(mouse_fd, UI_SET_EVBIT, EV_ABS);
