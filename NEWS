@@ -1,5 +1,31 @@
 
-=== input-emulator v0.7 ===
+=== input-emulator v0.8 ===
+
+
+
+Changes since v0.7:
+
+ * Fix mouse scroll feature
+
+ * Add --type-delay to start option for keyboard
+
+   Makes it possible to configure type delay in milliseconds. Default value
+   is 15 ms.
+
+ * Add mouse test example
+
+ * Add mouse and keyboard stress tests
+
+ * Update examples
+
+ * Fix status print of mouse y-max value
+
+ * Use abstract socket for client/server communication
+
+   Use abstract socket for client/server communication instead of a socket
+   file. This way we avoid being unable to start the service because of a
+   stale socket file being left from a potential crash or if someone killed
+   the service without proper shutdown.
 
 
 
