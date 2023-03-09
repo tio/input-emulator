@@ -61,6 +61,7 @@ Start options:
   -x, --x-max <points>               Maximum x-coordinate (only for mouse and touch)
   -y, --y-max <points>               Maximum y-coordinate (only for mouse and touch)
   -s, --slots <number>               Maximum number of slots (fingers) recognized (only for touch)
+  -d, --type-delay <ms>              Type delay (only for keyboard, default: 15)
   -n, --no-daemonize                 Run in foreground
 
 Keyboard actions:
@@ -113,8 +114,8 @@ Touch actions:
  $ input-emulator status
 Online devices:
   kbd: /sys/devices/virtual/input/input115
-mouse: /sys/devices/virtual/input/input113 (x-max: 1024 y-max: 0)
-touch: /sys/devices/virtual/input/input114 (x-max: 1024 y-max: 768 slots: 0)
+mouse: /sys/devices/virtual/input/input113 (x-max: 1024 y-max: 768)
+touch: /sys/devices/virtual/input/input114 (x-max: 1024 y-max: 768 slots: 4)
 ```
 
 ## 4. Installation

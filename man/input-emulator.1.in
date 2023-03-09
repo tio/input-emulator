@@ -76,8 +76,9 @@ Destroy virtual input device
 
 .TP
 .BR kbd
+.B [--type-delay <ms>]
 
-Create keyboard input device.
+Create keyboard input device with specified type delay in milliseconds (default: 15)
 
 .TP
 .BR mouse
