@@ -32,7 +32,7 @@ Show program version
 
 .TP
 .BR start
-.I <device>
+.I kbd|mouse|touch
 .I [<arguments>]
 
 Create virtual input device
@@ -194,30 +194,30 @@ Destroy all input devices (quits daemon).
 
 .TP
 Touch example:
- $ input-emulator touch start --x-max 2560 --y-max 1440 --slots 4
+ $ input-emulator start touch --x-max 2560 --y-max 1440 --slots 4
  $ input-emulator touch tap 1280 720
- $ input-emulator touch stop
+ $ input-emulator stop touch
 
 .TP
 Mouse example:
- $ input-emulator mouse start --x-max 2560 --y-max 1440
+ $ input-emulator start mouse --x-max 2560 --y-max 1440
  $ input-emulator mouse move 200 -300
  $ input-emulator mouse click left
  $ input-emulator mouse down middle
  $ input-emulator mouse up middle
  $ input-emulator mouse scroll -1
- $ input-emulator mouse stop
+ $ input-emulator stop mouse
 
 
 .TP
 Keyboard example:
- $ input-emulator kbd start
+ $ input-emulator start kbd
  $ input-emulator kbd type 'hello there'
  $ input-emulator kbd keydown ctrl
  $ input-emulator kbd key t
  $ input-emulator kbd keyup ctrl
  $ input-emulator kbd key q
- $ input-emulator kbd stop
+ $ input-emulator stop kbd
 
 .TP
 Show status of input devices:
