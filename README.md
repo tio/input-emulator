@@ -119,6 +119,14 @@ touch: /sys/devices/virtual/input/input114 (x-max: 1024 y-max: 768 slots: 4)
 
 ## 4. Installation
 
+### Prerequisite
+
+For the input-emulator to be able to create emulated input devices the Linux
+kernel feature INPUT_UINPUT must be enabled (see drivers/input/misc/Kconfig in
+the Linux kernel).
+
+Most distributions have this feature enabled.
+
 ### 4.1 Installation from source
 Install steps:
 
