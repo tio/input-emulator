@@ -159,7 +159,7 @@ usermod -a -G uinput <username>
 
 Create a udev rule /etc/udev/rules.d/99-input.rules containing:
 ```
-KERNEL==”uinput”, GROUP=”uinput”, MODE:=”0660″
+KERNEL=="uinput", GROUP="uinput", MODE:="0660"
 ```
 
 Then reboot computer and your user should have rw access to /dev/uinput and
