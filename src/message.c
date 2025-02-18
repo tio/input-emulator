@@ -283,7 +283,7 @@ int msg_receive(void **message)
         bytes_read = read(*sockfd, message_p, bytes_remaining);
         if (bytes_read < 0)
         {
-            warning_printf("Writing to socket (%s)\n", strerror(errno));
+            warning_printf("Reading from socket (%s)\n", strerror(errno));
             return -errno;
         }
 
