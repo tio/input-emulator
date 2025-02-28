@@ -17,7 +17,7 @@ input_emulator_sources = [
   'keyboard.c'
 ]
 
-input_emulator_c_args = ['-Wno-unused-result']
+input_emulator_c_args = ['-Wno-unused-result', '-Wno-shadow']
 
 enable_debug = get_option('enable-debug')
 if enable_debug
