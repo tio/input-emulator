@@ -149,7 +149,7 @@ you can do the following:
 
 Create an uinput group:
 ```
-$ sudo groupdadd -f uinput
+$ sudo groupadd -f uinput
 ```
 
 Add user to group:
